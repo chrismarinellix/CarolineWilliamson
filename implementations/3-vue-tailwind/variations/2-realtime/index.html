@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caroline Williamson - Real-time Leadership Dashboard (Vue 3 Reactivity Demo)</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .vue-gradient {
+            background: linear-gradient(135deg, #4fc08d 0%, #42b883 50%, #1e40af 100%);
+            background-size: 400% 400%;
+            animation: vueGradient 15s ease infinite;
+        }
+
+        @keyframes vueGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .vue-glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .vue-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .vue-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(79, 192, 141, 0.3);
+        }
+
+        .realtime-indicator {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .data-flow {
+            animation: dataFlow 3s ease-in-out infinite;
+        }
+
+        @keyframes dataFlow {
+            0%, 100% { opacity: 0.3; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-10px); }
+        }
+
+        .counter-animation {
+            animation: countUp 2s ease-out;
+        }
+
+        @keyframes countUp {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .vue-transition-enter-active {
+            transition: all 0.3s ease;
+        }
+        .vue-transition-leave-active {
+            transition: all 0.8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+        }
+        .vue-transition-enter-from {
+            transform: translateX(20px);
+            opacity: 0;
+        }
+        .vue-transition-leave-to {
+            transform: translateX(-20px);
+            opacity: 0;
+        }
+
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity 0.5s ease;
+        }
+        .fade-enter-from, .fade-leave-to {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="vue-gradient min-h-screen">
+    <div id="app"></div>
+
+    <script>
+        const { createApp, ref, reactive, computed, onMounted, nextTick, watch } = Vue;
+
+        createApp({
+            setup() {
+                // Reactive state (showcasing Vue 3 reactivity)
+                const isLoaded = ref(false);
+                const currentTime = ref(new Date());
+                const activeUsers = ref(847);
+                const systemLoad = ref(67.3);
+                const teamEngagement = ref(84);
+                const uptime = ref(99.8);
+                const selectedTab = ref('overview');
+                const darkMode = ref(false);
+
+                // Real-time data simulation
+                const realTimeData = reactive({
+                    applications: [
+                        { name: "Customer Portal", status: "healthy", uptime: 99.9, users: 23456, lastUpdate: "30s ago", responseTime: 120 },
+                        { name: "Payment Gateway", status: "healthy", uptime: 99.8, users: 45123, lastUpdate: "15s ago", responseTime: 95 },
+                        { name: "Data Platform", status: "warning", uptime: 98.5, users: 12789, lastUpdate: "2m ago", responseTime: 250 },
+                        { name: "AI Analytics", status: "healthy", uptime: 99.7, users: 8934, lastUpdate: "45s ago", responseTime: 180 }
+                    ],
+                    metrics: {
+                        budgetUtilization: 78.5,
+                        projectsCompleted: 23,
+                        teamSatisfaction: 84,
+                        costSavings: 4.2
+                    },
+                    notifications: [],
+                    alerts: []
+                });
+
+                // Computed properties (showcasing Vue 3 computed)
+                const formattedTime = computed(() => {
+                    return currentTime.value.toLocaleTimeString();
+                });
+
+                const totalUsers = computed(() => {
+                    return realTimeData.applications.reduce((sum, app) => sum + app.users, 0);
+                });
+
+                const averageResponseTime = computed(() => {
+                    const total = realTimeData.applications.reduce((sum, app) => sum + app.responseTime, 0);
+                    return Math.round(total / realTimeData.applications.length);
+                });
+
+                const healthyApps = computed(() => {
+                    return realTimeData.applications.filter(app => app.status === 'healthy').length;
+                });
+
+                // Watchers (showcasing Vue 3 watch)
+                watch(teamEngagement, (newVal, oldVal) => {
+                    if (newVal > oldVal) {
+                        addNotification('Team engagement improved!', 'success');
+                    }
+                });
+
+                watch(systemLoad, (newVal) => {
+                    if (newVal > 80) {
+                        addNotification('High system load detected', 'warning');
+                    }
+                });
+
+                // Methods
+                const addNotification = (message, type) => {
+                    const notification = {
+                        id: Date.now(),
+                        message,
+                        type,
+                        timestamp: new Date()
+                    };
+                    realTimeData.notifications.unshift(notification);
+                    
+                    // Remove after 5 seconds
+                    setTimeout(() => {
+                        const index = realTimeData.notifications.findIndex(n => n.id === notification.id);
+                        if (index > -1) {
+                            realTimeData.notifications.splice(index, 1);
+                        }
+                    }, 5000);
+                };
+
+                const simulateRealTimeUpdates = () => {
+                    // Update metrics randomly
+                    setInterval(() => {
+                        activeUsers.value = 800 + Math.floor(Math.random() * 100);
+                        systemLoad.value = 60 + Math.random() * 25;
+                        
+                        // Randomly update application metrics
+                        realTimeData.applications.forEach(app => {
+                            app.users += Math.floor((Math.random() - 0.5) * 100);
+                            app.users = Math.max(1000, app.users);
+                            app.responseTime = 80 + Math.random() * 150;
+                            app.uptime = Math.max(95, Math.min(100, app.uptime + (Math.random() - 0.5) * 0.1));
+                        });
+
+                        currentTime.value = new Date();
+                    }, 2000);
+
+                    // Team engagement updates
+                    setInterval(() => {
+                        teamEngagement.value = Math.max(75, Math.min(90, teamEngagement.value + (Math.random() - 0.5) * 2));
+                    }, 5000);
+                };
+
+                const toggleDarkMode = () => {
+                    darkMode.value = !darkMode.value;
+                    document.body.classList.toggle('dark', darkMode.value);
+                };
+
+                const refreshData = () => {
+                    // Simulate data refresh
+                    addNotification('Data refreshed successfully!', 'success');
+                    
+                    // Reset some values with animation
+                    systemLoad.value = 45 + Math.random() * 20;
+                    realTimeData.metrics.budgetUtilization = 70 + Math.random() * 15;
+                };
+
+                // Lifecycle
+                onMounted(() => {
+                    isLoaded.value = true;
+                    simulateRealTimeUpdates();
+                    addNotification('Real-time dashboard connected!', 'success');
+                });
+
+                return {
+                    isLoaded,
+                    currentTime,
+                    formattedTime,
+                    activeUsers,
+                    systemLoad,
+                    teamEngagement,
+                    uptime,
+                    selectedTab,
+                    darkMode,
+                    realTimeData,
+                    totalUsers,
+                    averageResponseTime,
+                    healthyApps,
+                    toggleDarkMode,
+                    refreshData,
+                    addNotification
+                };
+            },
+            template: \`
+                <div class="min-h-screen" :class="darkMode ? 'bg-gray-900' : ''">
+                    <!-- Navigation -->
+                    <nav class="vue-glass sticky top-0 z-50">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div class="flex justify-between items-center h-16">
+                                <div class="flex items-center space-x-4">
+                                    <a href="../../../tech-showcase.html" 
+                                       class="flex items-center space-x-2 text-white hover:text-green-200 transition-colors">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="m12 19-7-7 7-7"/>
+                                            <path d="M19 12H5"/>
+                                        </svg>
+                                        <span class="hidden sm:inline">Back to Showcase</span>
+                                    </a>
+                                    <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1 rounded-full text-sm font-semibold realtime-indicator">
+                                        Vue 3 Real-time Demo
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4">
+                                    <div class="hidden md:flex items-center space-x-2 text-white">
+                                        <div class="w-3 h-3 bg-green-400 rounded-full realtime-indicator"></div>
+                                        <span class="text-sm">Live: {{ formattedTime }}</span>
+                                    </div>
+                                    <button @click="toggleDarkMode" 
+                                            class="p-2 rounded-lg vue-card" 
+                                            :class="darkMode ? 'bg-yellow-500 text-gray-900' : 'bg-gray-800 text-white'">
+                                        {{ darkMode ? '☀️' : '🌙' }}
+                                    </button>
+                                    <button @click="refreshData" 
+                                            class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all">
+                                        🔄 Refresh
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <!-- Hero Dashboard -->
+                    <section class="py-12 px-4">
+                        <div class="max-w-7xl mx-auto">
+                            <div class="text-center mb-12">
+                                <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">
+                                    Caroline Williamson
+                                </h1>
+                                <p class="text-xl md:text-2xl text-green-200 font-semibold mb-4">
+                                    Real-time Technology Leadership Dashboard
+                                </p>
+                                <p class="text-green-100 max-w-3xl mx-auto">
+                                    This dashboard showcases Vue 3's reactive data system with live updates, 
+                                    computed properties, watchers, and component composition API.
+                                </p>
+                            </div>
+
+                            <!-- Real-time Metrics Grid -->
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+                                <div class="vue-glass rounded-xl p-6 vue-card">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="text-2xl">👥</div>
+                                        <div class="realtime-indicator w-2 h-2 bg-green-400 rounded-full"></div>
+                                    </div>
+                                    <div class="text-2xl font-bold text-white counter-animation">
+                                        {{ activeUsers.toLocaleString() }}
+                                    </div>
+                                    <div class="text-green-200 text-sm">Active Users</div>
+                                    <div class="text-xs text-green-300 mt-1">+{{ Math.floor(Math.random() * 50) }} this hour</div>
+                                </div>
+
+                                <div class="vue-glass rounded-xl p-6 vue-card">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="text-2xl">⚡</div>
+                                        <div class="realtime-indicator w-2 h-2" :class="systemLoad > 80 ? 'bg-red-400' : 'bg-green-400'"></div>
+                                    </div>
+                                    <div class="text-2xl font-bold text-white counter-animation">
+                                        {{ systemLoad.toFixed(1) }}%
+                                    </div>
+                                    <div class="text-green-200 text-sm">System Load</div>
+                                    <div class="text-xs mt-1" :class="systemLoad > 80 ? 'text-red-300' : 'text-green-300'">
+                                        {{ systemLoad > 80 ? 'High load detected' : 'Optimal performance' }}
+                                    </div>
+                                </div>
+
+                                <div class="vue-glass rounded-xl p-6 vue-card">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="text-2xl">📊</div>
+                                        <div class="realtime-indicator w-2 h-2 bg-blue-400"></div>
+                                    </div>
+                                    <div class="text-2xl font-bold text-white counter-animation">
+                                        {{ teamEngagement }}%
+                                    </div>
+                                    <div class="text-green-200 text-sm">Team Engagement</div>
+                                    <div class="text-xs text-blue-300 mt-1">Target: 80%</div>
+                                </div>
+
+                                <div class="vue-glass rounded-xl p-6 vue-card">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="text-2xl">🎯</div>
+                                        <div class="realtime-indicator w-2 h-2 bg-green-400"></div>
+                                    </div>
+                                    <div class="text-2xl font-bold text-white counter-animation">
+                                        {{ uptime.toFixed(1) }}%
+                                    </div>
+                                    <div class="text-green-200 text-sm">Uptime</div>
+                                    <div class="text-xs text-green-300 mt-1">SLA: 98.8%</div>
+                                </div>
+                            </div>
+
+                            <!-- Tab Navigation (showcasing Vue 3 component state) -->
+                            <div class="vue-glass rounded-t-xl">
+                                <div class="flex overflow-x-auto">
+                                    <button v-for="tab in ['overview', 'applications', 'team', 'projects']" 
+                                            :key="tab"
+                                            @click="selectedTab = tab"
+                                            class="px-6 py-4 font-semibold transition-all"
+                                            :class="selectedTab === tab ? 'text-green-400 border-b-2 border-green-400 bg-white/10' : 'text-white hover:text-green-200'">
+                                        {{ tab.charAt(0).toUpperCase() + tab.slice(1) }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Tab Content -->
+                            <div class="vue-glass rounded-b-xl p-8">
+                                <!-- Overview Tab -->
+                                <transition name="fade" mode="out-in">
+                                    <div v-if="selectedTab === 'overview'" key="overview">
+                                        <h3 class="text-2xl font-bold text-white mb-6">📊 Real-time Overview</h3>
+                                        <div class="grid md:grid-cols-2 gap-8">
+                                            <div>
+                                                <h4 class="text-lg font-semibold text-white mb-4">System Performance</h4>
+                                                <div class="space-y-4">
+                                                    <div class="flex justify-between items-center">
+                                                        <span class="text-green-200">Total Users:</span>
+                                                        <span class="text-white font-semibold">{{ totalUsers.toLocaleString() }}</span>
+                                                    </div>
+                                                    <div class="flex justify-between items-center">
+                                                        <span class="text-green-200">Avg Response Time:</span>
+                                                        <span class="text-white font-semibold">{{ averageResponseTime }}ms</span>
+                                                    </div>
+                                                    <div class="flex justify-between items-center">
+                                                        <span class="text-green-200">Healthy Apps:</span>
+                                                        <span class="text-white font-semibold">{{ healthyApps }}/{{ realTimeData.applications.length }}</span>
+                                                    </div>
+                                                    <div class="flex justify-between items-center">
+                                                        <span class="text-green-200">Budget Utilization:</span>
+                                                        <span class="text-white font-semibold">{{ realTimeData.metrics.budgetUtilization.toFixed(1) }}%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-lg font-semibold text-white mb-4">Recent Achievements</h4>
+                                                <div class="space-y-3">
+                                                    <div class="bg-white/10 p-3 rounded-lg data-flow">
+                                                        <div class="font-semibold text-white">AI Week Success</div>
+                                                        <div class="text-green-200 text-sm">12 strategic partners engaged</div>
+                                                    </div>
+                                                    <div class="bg-white/10 p-3 rounded-lg data-flow" style="animation-delay: 0.5s">
+                                                        <div class="font-semibold text-white">Copilot Rollout</div>
+                                                        <div class="text-green-200 text-sm">85% adoption rate achieved</div>
+                                                    </div>
+                                                    <div class="bg-white/10 p-3 rounded-lg data-flow" style="animation-delay: 1s">
+                                                        <div class="font-semibold text-white">Team Restructure</div>
+                                                        <div class="text-green-200 text-sm">Innovation culture established</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </transition>
+
+                                <!-- Applications Tab -->
+                                <transition name="fade" mode="out-in">
+                                    <div v-if="selectedTab === 'applications'" key="applications">
+                                        <h3 class="text-2xl font-bold text-white mb-6">🖥️ Application Portfolio Status</h3>
+                                        <div class="overflow-x-auto">
+                                            <table class="w-full">
+                                                <thead>
+                                                    <tr class="border-b border-white/20">
+                                                        <th class="text-left p-3 text-green-200 font-semibold">Application</th>
+                                                        <th class="text-left p-3 text-green-200 font-semibold">Status</th>
+                                                        <th class="text-left p-3 text-green-200 font-semibold">Uptime</th>
+                                                        <th class="text-left p-3 text-green-200 font-semibold">Users</th>
+                                                        <th class="text-left p-3 text-green-200 font-semibold">Response</th>
+                                                        <th class="text-left p-3 text-green-200 font-semibold">Last Update</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <transition-group name="vue-transition" tag="tbody">
+                                                        <tr v-for="app in realTimeData.applications" 
+                                                            :key="app.name"
+                                                            class="border-b border-white/10 hover:bg-white/5 transition-all">
+                                                            <td class="p-3 font-semibold text-white">{{ app.name }}</td>
+                                                            <td class="p-3">
+                                                                <span class="px-2 py-1 rounded-full text-xs font-semibold"
+                                                                      :class="app.status === 'healthy' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'">
+                                                                    {{ app.status }}
+                                                                </span>
+                                                            </td>
+                                                            <td class="p-3 text-white font-mono">{{ app.uptime.toFixed(1) }}%</td>
+                                                            <td class="p-3 text-white">{{ app.users.toLocaleString() }}</td>
+                                                            <td class="p-3 text-white">
+                                                                <span :class="app.responseTime > 200 ? 'text-yellow-300' : 'text-green-300'">
+                                                                    {{ Math.round(app.responseTime) }}ms
+                                                                </span>
+                                                            </td>
+                                                            <td class="p-3 text-green-200 text-sm">{{ app.lastUpdate }}</td>
+                                                        </tr>
+                                                    </transition-group>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </transition>
+
+                                <!-- Team Tab -->
+                                <transition name="fade" mode="out-in">
+                                    <div v-if="selectedTab === 'team'" key="team">
+                                        <h3 class="text-2xl font-bold text-white mb-6">👥 Team Performance Analytics</h3>
+                                        <div class="grid md:grid-cols-3 gap-6">
+                                            <div class="vue-glass rounded-xl p-6 vue-card">
+                                                <h4 class="font-semibold text-white mb-4">Engagement Score</h4>
+                                                <div class="text-3xl font-bold text-white mb-2">{{ teamEngagement }}%</div>
+                                                <div class="w-full bg-white/20 rounded-full h-2">
+                                                    <div class="bg-green-400 h-2 rounded-full transition-all duration-1000" 
+                                                         :style="{ width: teamEngagement + '%' }"></div>
+                                                </div>
+                                                <div class="text-green-200 text-sm mt-2">Above target (80%)</div>
+                                            </div>
+                                            <div class="vue-glass rounded-xl p-6 vue-card">
+                                                <h4 class="font-semibold text-white mb-4">Team Size</h4>
+                                                <div class="text-3xl font-bold text-white mb-2">250+</div>
+                                                <div class="text-green-200 text-sm">Matrix organization</div>
+                                                <div class="text-green-300 text-xs mt-1">Across 7 technology domains</div>
+                                            </div>
+                                            <div class="vue-glass rounded-xl p-6 vue-card">
+                                                <h4 class="font-semibold text-white mb-4">Performance</h4>
+                                                <div class="text-3xl font-bold text-white mb-2">A+</div>
+                                                <div class="text-green-200 text-sm">Leadership Rating</div>
+                                                <div class="text-green-300 text-xs mt-1">Engagement: 67% → 84%</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </transition>
+
+                                <!-- Projects Tab -->
+                                <transition name="fade" mode="out-in">
+                                    <div v-if="selectedTab === 'projects'" key="projects">
+                                        <h3 class="text-2xl font-bold text-white mb-6">🚀 Current Projects Status</h3>
+                                        <div class="space-y-4">
+                                            <div class="vue-glass rounded-lg p-4 vue-card">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <span class="font-semibold text-white">Microsoft Copilot Rollout</span>
+                                                    <span class="text-green-400 font-semibold">95%</span>
+                                                </div>
+                                                <div class="w-full bg-white/20 rounded-full h-3">
+                                                    <div class="bg-green-400 h-3 rounded-full transition-all duration-1000" style="width: 95%"></div>
+                                                </div>
+                                                <div class="text-green-200 text-sm mt-1">Expected completion: Next week</div>
+                                            </div>
+                                            <div class="vue-glass rounded-lg p-4 vue-card">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <span class="font-semibold text-white">Data Platform Implementation</span>
+                                                    <span class="text-blue-400 font-semibold">78%</span>
+                                                </div>
+                                                <div class="w-full bg-white/20 rounded-full h-3">
+                                                    <div class="bg-blue-400 h-3 rounded-full transition-all duration-1000" style="width: 78%"></div>
+                                                </div>
+                                                <div class="text-blue-200 text-sm mt-1">Data governance policies in review</div>
+                                            </div>
+                                            <div class="vue-glass rounded-lg p-4 vue-card">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <span class="font-semibold text-white">SAP S4Hana Upgrade Planning</span>
+                                                    <span class="text-purple-400 font-semibold">65%</span>
+                                                </div>
+                                                <div class="w-full bg-white/20 rounded-full h-3">
+                                                    <div class="bg-purple-400 h-3 rounded-full transition-all duration-1000" style="width: 65%"></div>
+                                                </div>
+                                                <div class="text-purple-200 text-sm mt-1">Strategy development phase</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </transition>
+                            </div>
+
+                            <!-- Real-time Notifications -->
+                            <div class="fixed top-20 right-4 space-y-2 z-50">
+                                <transition-group name="vue-transition">
+                                    <div v-for="notification in realTimeData.notifications"
+                                         :key="notification.id"
+                                         class="vue-glass rounded-lg px-4 py-3 text-white shadow-lg max-w-sm"
+                                         :class="notification.type === 'success' ? 'border-l-4 border-green-400' : 'border-l-4 border-yellow-400'">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="text-lg">{{ notification.type === 'success' ? '✅' : '⚠️' }}</div>
+                                            <div class="flex-1">
+                                                <div class="font-semibold">{{ notification.message }}</div>
+                                                <div class="text-xs text-green-200">{{ notification.timestamp.toLocaleTimeString() }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </transition-group>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Footer -->
+                    <footer class="vue-glass py-8">
+                        <div class="max-w-4xl mx-auto text-center px-4">
+                            <p class="text-white mb-4">
+                                Vue 3 Real-time Dashboard - Reactivity, Watchers, Computed Properties
+                            </p>
+                            <div class="flex justify-center space-x-4 flex-wrap">
+                                <span class="bg-green-600 px-3 py-1 rounded text-sm text-white">Reactive Data</span>
+                                <span class="bg-blue-600 px-3 py-1 rounded text-sm text-white">Live Updates</span>
+                                <span class="bg-purple-600 px-3 py-1 rounded text-sm text-white">Computed Props</span>
+                                <span class="bg-yellow-600 px-3 py-1 rounded text-sm text-white">Watchers</span>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            \`
+        }).mount('#app');
+    </script>
+</body>
+</html>
