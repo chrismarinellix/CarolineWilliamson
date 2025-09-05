@@ -22,7 +22,11 @@
       "Bash(start implementations/1-nextjs-tailwind/variations/4-dashboard/index.html)",
       "Bash(start implementations/2-react-framer/variations/index.html)",
       "Bash(start implementations/2-react-framer/variations/2-advanced/index.html)",
-      "Bash(start implementations/2-react-framer/variations/4-3d/index.html)"
+      "Bash(start implementations/2-react-framer/variations/4-3d/index.html)",
+      "Bash(start implementations/3-vue-tailwind/variations/2-realtime/index.html)",
+      "Bash(start implementations/4-svelte-sveltekit/variations/2-performance/index.html)",
+      "Bash(start implementations/5-react-chakra/variations/2-accessibility/index.html)",
+      "Bash(start implementations/6-astro-tailwind/variations/6-multiframework/index.html)"
     ],
     "deny": [],
     "ask": []
