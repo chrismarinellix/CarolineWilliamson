@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caroline Williamson - 3D Interactive Portfolio (React + Framer Motion 3D)</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            margin: 0; 
+            overflow-x: hidden; 
+            perspective: 2000px;
+            background: #000;
+        }
+        
+        .space-bg {
+            background: radial-gradient(ellipse at center, #1e3a8a 0%, #111827 70%, #000000 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .floating-3d {
+            transform-style: preserve-3d;
+            animation: float3d 20s ease-in-out infinite;
+        }
+
+        @keyframes float3d {
+            0%, 100% { transform: rotateX(0deg) rotateY(0deg) translateZ(0px); }
+            25% { transform: rotateX(5deg) rotateY(90deg) translateZ(50px); }
+            50% { transform: rotateX(-5deg) rotateY(180deg) translateZ(0px); }
+            75% { transform: rotateX(5deg) rotateY(270deg) translateZ(-50px); }
+        }
+
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+        }
+
+        .card-3d:hover {
+            transform: rotateY(15deg) rotateX(10deg) translateZ(50px);
+        }
+
+        .holographic {
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            animation: holographic 8s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes holographic {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-3d {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+        }
+
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .cube-3d {
+            transform-style: preserve-3d;
+            width: 100px;
+            height: 100px;
+            position: relative;
+            animation: rotateCube 15s linear infinite;
+        }
+
+        @keyframes rotateCube {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(30, 64, 175, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .cube-front { transform: rotateY(0deg) translateZ(50px); }
+        .cube-back { transform: rotateY(180deg) translateZ(50px); }
+        .cube-right { transform: rotateY(90deg) translateZ(50px); }
+        .cube-left { transform: rotateY(-90deg) translateZ(50px); }
+        .cube-top { transform: rotateX(90deg) translateZ(50px); }
+        .cube-bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+        .orbit-ring {
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            position: absolute;
+            animation: rotate 25s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .depth-layer-1 { transform: translateZ(0px); }
+        .depth-layer-2 { transform: translateZ(50px); }
+        .depth-layer-3 { transform: translateZ(100px); }
+        .depth-layer-4 { transform: translateZ(150px); }
+
+        @media (max-width: 768px) {
+            body { perspective: 1000px; }
+            .card-3d:hover { transform: rotateY(8deg) rotateX(5deg) translateZ(25px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-bg">
+        <!-- Animated Stars -->
+        <div id="starsContainer"></div>
+    </div>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        function ThreeDimensionalCV() {
+            const [currentSection, setCurrentSection] = useState(0);
+            const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
+            const [isLoaded, setIsLoaded] = useState(false);
+            const containerRef = useRef(null);
+
+            const sections = [
+                { name: "Profile", icon: "👤", color: "from-blue-500 to-indigo-600" },
+                { name: "Experience", icon: "💼", color: "from-purple-500 to-pink-600" },
+                { name: "Achievements", icon: "🏆", color: "from-green-500 to-emerald-600" },
+                { name: "Contact", icon: "🚀", color: "from-red-500 to-orange-600" }
+            ];
+
+            useEffect(() => {
+                setIsLoaded(true);
+                
+                // Create stars
+                const starsContainer = document.getElementById('starsContainer');
+                for (let i = 0; i < 100; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.width = Math.random() * 3 + 1 + 'px';
+                    star.style.height = star.style.width;
+                    star.style.animationDelay = Math.random() * 3 + 's';
+                    starsContainer.appendChild(star);
+                }
+
+                // Mouse tracking for 3D effects
+                const handleMouseMove = (e) => {
+                    const x = e.clientX / window.innerWidth;
+                    const y = e.clientY / window.innerHeight;
+                    setMousePosition({ x, y });
+                };
+
+                document.addEventListener('mousemove', handleMouseMove);
+                return () => document.removeEventListener('mousemove', handleMouseMove);
+            }, []);
+
+            const ThreeDCard = ({ children, className = "", delay = 0 }) => {
+                const cardRef = useRef(null);
+
+                const handleMouseEnter = () => {
+                    if (cardRef.current) {
+                        const rect = cardRef.current.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        
+                        cardRef.current.style.transform = 'rotateY(15deg) rotateX(10deg) translateZ(50px) scale(1.05)';
+                        cardRef.current.style.boxShadow = '0 30px 60px rgba(30, 64, 175, 0.4)';
+                    }
+                };
+
+                const handleMouseLeave = () => {
+                    if (cardRef.current) {
+                        cardRef.current.style.transform = 'rotateY(0deg) rotateX(0deg) translateZ(0px) scale(1)';
+                        cardRef.current.style.boxShadow = '0 15px 30px rgba(30, 64, 175, 0.2)';
+                    }
+                };
+
+                return (
+                    <div
+                        ref={cardRef}
+                        className={\`card-3d \${className}\`}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                        style={{
+                            opacity: isLoaded ? 1 : 0,
+                            transform: isLoaded ? 'translateY(0) rotateX(0)' : 'translateY(100px) rotateX(-90deg)',
+                            transition: \`all 1s cubic-bezier(0.23, 1, 0.320, 1) \${delay}s\`
+                        }}
+                    >
+                        {children}
+                    </div>
+                );
+            };
+
+            const FloatingCube = ({ icon, position }) => (
+                <div 
+                    className="fixed cube-3d z-10"
+                    style={{
+                        left: position.x + '%',
+                        top: position.y + '%',
+                        transform: \`translate(-50%, -50%) rotateX(\${mousePosition.y * 30}deg) rotateY(\${mousePosition.x * 30}deg)\`
+                    }}
+                >
+                    <div className="cube-face cube-front text-white">{icon}</div>
+                    <div className="cube-face cube-back text-white">{icon}</div>
+                    <div className="cube-face cube-right text-white">{icon}</div>
+                    <div className="cube-face cube-left text-white">{icon}</div>
+                    <div className="cube-face cube-top text-white">{icon}</div>
+                    <div className="cube-face cube-bottom text-white">{icon}</div>
+                </div>
+            );
+
+            return (
+                <div 
+                    ref={containerRef}
+                    className="min-h-screen relative"
+                    style={{
+                        transform: \`rotateX(\${(mousePosition.y - 0.5) * 5}deg) rotateY(\${(mousePosition.x - 0.5) * 5}deg)\`,
+                        transition: 'transform 0.1s ease-out'
+                    }}
+                >
+                    {/* Floating 3D Elements */}
+                    <FloatingCube icon="🎯" position={{ x: 15, y: 20 }} />
+                    <FloatingCube icon="🚀" position={{ x: 85, y: 30 }} />
+                    <FloatingCube icon="💼" position={{ x: 20, y: 80 }} />
+                    <FloatingCube icon="⚡" position={{ x: 80, y: 75 }} />
+
+                    {/* Navigation */}
+                    <nav className="fixed top-0 left-0 right-0 z-50 glass-3d">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="flex justify-between items-center h-16">
+                                <div className="flex items-center space-x-4">
+                                    <a href="../../../tech-showcase.html" className="flex items-center space-x-2 text-white hover:text-blue-300 transition-colors">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path d="m12 19-7-7 7-7"/>
+                                            <path d="M19 12H5"/>
+                                        </svg>
+                                        <span className="hidden sm:inline">Back to Showcase</span>
+                                    </a>
+                                    <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                        3D Portfolio Demo
+                                    </div>
+                                </div>
+                                
+                                <div className="flex space-x-2">
+                                    {sections.map((section, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setCurrentSection(index)}
+                                            className={\`px-4 py-2 rounded-full font-semibold transition-all duration-300 \${
+                                                currentSection === index 
+                                                    ? 'bg-white text-gray-800 shadow-lg transform scale-110' 
+                                                    : 'text-white hover:bg-white/20 hover:scale-105'
+                                            }\`}
+                                            style={{
+                                                transform: currentSection === index 
+                                                    ? 'translateZ(20px) scale(1.1)' 
+                                                    : 'translateZ(0px) scale(1)',
+                                                transition: 'all 0.4s cubic-bezier(0.23, 1, 0.320, 1)'
+                                            }}
+                                        >
+                                            <span className="mr-2">{section.icon}</span>
+                                            <span className="hidden md:inline">{section.name}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <div className="pt-20 relative z-10">
+                        {/* Profile Section - 3D Hero */}
+                        {currentSection === 0 && (
+                            <section className="py-20 px-4 relative">
+                                <div className="max-w-4xl mx-auto text-center">
+                                    <ThreeDCard className="glass-3d rounded-3xl p-12 mb-12">
+                                        <div 
+                                            className="relative"
+                                            style={{
+                                                transform: \`rotateY(\${(mousePosition.x - 0.5) * 20}deg) rotateX(\${(mousePosition.y - 0.5) * 10}deg)\`,
+                                                transition: 'transform 0.1s ease-out'
+                                            }}
+                                        >
+                                            <h1 className="text-5xl md:text-7xl font-bold mb-6 holographic">
+                                                Caroline Williamson
+                                            </h1>
+                                            <p className="text-2xl md:text-3xl text-white font-light mb-8">
+                                                Executive Technology Leader
+                                            </p>
+                                            <div className="text-lg text-blue-200 max-w-2xl mx-auto leading-relaxed">
+                                                20+ years of technology leadership experience across Energy, Financial Services, 
+                                                and Telecommunications. Expert in digital transformation, AI strategy, and building 
+                                                high-performance teams.
+                                            </div>
+                                        </div>
+                                    </ThreeDCard>
+
+                                    {/* 3D Contact Spheres */}
+                                    <div className="flex justify-center space-x-12">
+                                        {[
+                                            { icon: "📞", label: "Call", href: "tel:0458024081", color: "from-blue-500 to-cyan-500" },
+                                            { icon: "✉️", label: "Email", href: "mailto:cparuit@gmail.com", color: "from-purple-500 to-pink-500" },
+                                            { icon: "🔗", label: "LinkedIn", href: "https://www.linkedin.com/in/caroline-williamson-technology", color: "from-green-500 to-emerald-500" }
+                                        ].map((contact, index) => (
+                                            <ThreeDCard key={index} delay={index * 0.3}>
+                                                <a
+                                                    href={contact.href}
+                                                    target={contact.href.includes('http') ? '_blank' : '_self'}
+                                                    className={\`block w-24 h-24 bg-gradient-to-br \${contact.color} rounded-full flex flex-col items-center justify-center text-white shadow-2xl hover:shadow-blue-500/50 transition-all duration-300\`}
+                                                    style={{
+                                                        transform: \`rotateY(\${(mousePosition.x - 0.5) * 15}deg) rotateZ(\${(mousePosition.y - 0.5) * 10}deg)\`,
+                                                        transition: 'transform 0.2s ease-out'
+                                                    }}
+                                                >
+                                                    <div className="text-2xl">{contact.icon}</div>
+                                                    <div className="text-xs">{contact.label}</div>
+                                                </a>
+                                            </ThreeDCard>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Orbiting Elements */}
+                                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                                    <div className="orbit-ring w-96 h-96" style={{ animationDuration: '30s' }}>
+                                        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-blue-400 rounded-full"></div>
+                                    </div>
+                                    <div className="orbit-ring w-80 h-80" style={{ animationDuration: '25s', animationDirection: 'reverse' }}>
+                                        <div className="absolute top-0 right-0 w-4 h-4 bg-purple-400 rounded-full"></div>
+                                    </div>
+                                    <div className="orbit-ring w-64 h-64" style={{ animationDuration: '20s' }}>
+                                        <div className="absolute bottom-0 left-0 w-5 h-5 bg-green-400 rounded-full"></div>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+
+                        {/* Experience Section - 3D Timeline */}
+                        {currentSection === 1 && (
+                            <section className="py-20 px-4 relative">
+                                <div className="max-w-6xl mx-auto">
+                                    <ThreeDCard className="text-center mb-16">
+                                        <h2 className="text-4xl font-bold text-white holographic mb-8">
+                                            3D Career Timeline
+                                        </h2>
+                                        <p className="text-xl text-blue-200">
+                                            Navigate through my career journey in three dimensions
+                                        </p>
+                                    </ThreeDCard>
+
+                                    <div className="space-y-16">
+                                        {[
+                                            {
+                                                company: "Jemena",
+                                                role: "General Manager Corporate Technology",
+                                                period: "2024-Current",
+                                                depth: "depth-layer-1",
+                                                achievements: [
+                                                    "First Technology Strategy & 5-Year Roadmap",
+                                                    "AI Week with 12 strategic partners",
+                                                    "Microsoft Copilot rollout success",
+                                                    "SAP S4Hana upgrade leadership"
+                                                ]
+                                            },
+                                            {
+                                                company: "Nutun",
+                                                role: "Chief Technology Officer",
+                                                period: "2023-2024",
+                                                depth: "depth-layer-2",
+                                                achievements: [
+                                                    "IT due diligence for division sale",
+                                                    "Strategic technology landscape review",
+                                                    "Technical integration of acquisitions"
+                                                ]
+                                            },
+                                            {
+                                                company: "Westpac",
+                                                role: "Head of Technology", 
+                                                period: "2016-2023",
+                                                depth: "depth-layer-3",
+                                                achievements: [
+                                                    "$200M+ budget management",
+                                                    "83 applications across 7 domains",
+                                                    "99.8% service availability",
+                                                    "40k employees & 5M customers served"
+                                                ]
+                                            }
+                                        ].map((exp, index) => (
+                                            <ThreeDCard 
+                                                key={index}
+                                                className={\`glass-3d rounded-2xl p-8 \${exp.depth}\`}
+                                                delay={index * 0.4}
+                                            >
+                                                <div 
+                                                    className="grid md:grid-cols-2 gap-8 items-center"
+                                                    style={{
+                                                        transform: \`rotateY(\${(mousePosition.x - 0.5) * 10}deg) translateZ(\${index * 20}px)\`,
+                                                        transition: 'transform 0.2s ease-out'
+                                                    }}
+                                                >
+                                                    <div className="text-left">
+                                                        <h3 className="text-3xl font-bold text-white mb-2">{exp.company}</h3>
+                                                        <h4 className="text-xl font-semibold text-blue-200 mb-4">{exp.role}</h4>
+                                                        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full inline-block text-sm font-semibold">
+                                                            {exp.period}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div className="space-y-3">
+                                                        {exp.achievements.map((achievement, achIndex) => (
+                                                            <div
+                                                                key={achIndex}
+                                                                className="bg-white/10 p-3 rounded-lg text-white hover:bg-white/20 transition-all duration-300 cursor-pointer"
+                                                                style={{
+                                                                    opacity: isLoaded ? 1 : 0,
+                                                                    transform: isLoaded ? 'translateX(0)' : \`translateX(\${index % 2 === 0 ? '-50px' : '50px'})\`,
+                                                                    transition: \`all 0.6s ease-out \${(index * 0.4) + (achIndex * 0.1)}s\`
+                                                                }}
+                                                                onMouseEnter={(e) => {
+                                                                    e.target.style.transform = 'translateX(10px) scale(1.05)';
+                                                                }}
+                                                                onMouseLeave={(e) => {
+                                                                    e.target.style.transform = 'translateX(0) scale(1)';
+                                                                }}
+                                                            >
+                                                                <div className="flex items-center space-x-2">
+                                                                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                                                                    <span className="text-sm">{achievement}</span>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </ThreeDCard>
+                                        ))}
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+
+                        {/* Achievements Section - 3D Grid */}
+                        {currentSection === 2 && (
+                            <section className="py-20 px-4 relative">
+                                <div className="max-w-6xl mx-auto">
+                                    <ThreeDCard className="text-center mb-16">
+                                        <h2 className="text-4xl font-bold text-white holographic mb-8">
+                                            Achievement Matrix
+                                        </h2>
+                                        <p className="text-xl text-blue-200">
+                                            Hover over achievements to see 3D details
+                                        </p>
+                                    </ThreeDCard>
+
+                                    <div 
+                                        className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+                                        style={{
+                                            transform: \`rotateX(\${(mousePosition.y - 0.5) * 10}deg) rotateY(\${(mousePosition.x - 0.5) * 10}deg)\`,
+                                            transition: 'transform 0.1s ease-out'
+                                        }}
+                                    >
+                                        {[
+                                            { title: "Budget Leadership", value: "$300M+", icon: "💰", description: "Enterprise budget management across multiple divisions" },
+                                            { title: "Team Excellence", value: "84%", icon: "📊", description: "Team engagement score achieved (from 67%)" },
+                                            { title: "Customer Impact", value: "5M", icon: "🤝", description: "Customers served through technology platforms" },
+                                            { title: "System Uptime", value: "99.8%", icon: "⚡", description: "Service availability across 83 applications" },
+                                            { title: "Cost Savings", value: "$45M", icon: "📉", description: "Annual cost reductions achieved" },
+                                            { title: "Digital Transformation", value: "$120M", icon: "🔄", description: "Advice Remediation Program delivered" }
+                                        ].map((metric, index) => (
+                                            <ThreeDCard 
+                                                key={index}
+                                                className="glass-3d rounded-2xl p-8 text-center text-white hover:bg-white/15 cursor-pointer"
+                                                delay={index * 0.2}
+                                            >
+                                                <div
+                                                    style={{
+                                                        transform: \`translateZ(\${index * 10}px) rotateY(\${(mousePosition.x - 0.5) * 15}deg)\`,
+                                                        transition: 'transform 0.2s ease-out'
+                                                    }}
+                                                >
+                                                    <div className="text-5xl mb-4 floating-3d">{metric.icon}</div>
+                                                    <div className="text-3xl font-bold mb-2">{metric.value}</div>
+                                                    <h3 className="text-lg font-semibold mb-4">{metric.title}</h3>
+                                                    <p className="text-blue-200 text-sm">{metric.description}</p>
+                                                </div>
+                                            </ThreeDCard>
+                                        ))}
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+
+                        {/* Contact Section - Interactive 3D Form */}
+                        {currentSection === 3 && (
+                            <section className="py-20 px-4 relative">
+                                <div className="max-w-2xl mx-auto">
+                                    <ThreeDCard className="glass-3d rounded-3xl p-8 text-center">
+                                        <h2 className="text-4xl font-bold text-white holographic mb-8">
+                                            3D Contact Experience
+                                        </h2>
+                                        
+                                        <div className="space-y-6">
+                                            <div 
+                                                className="grid md:grid-cols-2 gap-6"
+                                                style={{
+                                                    transform: \`rotateX(\${(mousePosition.y - 0.5) * 5}deg) translateZ(20px)\`,
+                                                    transition: 'transform 0.1s ease-out'
+                                                }}
+                                            >
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="Your Name"
+                                                    className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white/50 focus:transform focus:scale-105 transition-all duration-300"
+                                                />
+                                                <input 
+                                                    type="email" 
+                                                    placeholder="Your Email"
+                                                    className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white/50 focus:transform focus:scale-105 transition-all duration-300"
+                                                />
+                                            </div>
+                                            
+                                            <textarea 
+                                                rows="6" 
+                                                placeholder="Your Message"
+                                                className="w-full px-4 py-3 bg-white/10 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white/50 focus:transform focus:scale-105 transition-all duration-300 resize-none"
+                                                style={{
+                                                    transform: \`translateZ(10px)\`,
+                                                    transition: 'transform 0.2s ease-out'
+                                                }}
+                                            ></textarea>
+                                            
+                                            <button
+                                                onClick={() => alert('3D Form Submitted! This showcases advanced Framer Motion form interactions with 3D transforms.')}
+                                                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 rounded-lg font-bold text-lg shadow-2xl hover:shadow-blue-500/50 transition-all duration-300"
+                                                style={{
+                                                    transform: \`translateZ(30px) rotateX(\${(mousePosition.y - 0.5) * -5}deg)\`,
+                                                    transition: 'transform 0.1s ease-out'
+                                                }}
+                                                onMouseEnter={(e) => {
+                                                    e.target.style.transform = 'translateZ(50px) scale(1.05) rotateX(-10deg)';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.target.style.transform = 'translateZ(30px) scale(1) rotateX(0deg)';
+                                                }}
+                                            >
+                                                🚀 Send 3D Message
+                                            </button>
+                                        </div>
+                                    </ThreeDCard>
+                                </div>
+                            </section>
+                        )}
+                    </div>
+
+                    {/* Section Indicator */}
+                    <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+                        <div className="flex space-x-4">
+                            {sections.map((section, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setCurrentSection(index)}
+                                    className={\`w-4 h-4 rounded-full transition-all duration-300 \${
+                                        currentSection === index 
+                                            ? 'bg-white scale-125 shadow-lg shadow-white/50' 
+                                            : 'bg-white/50 hover:bg-white/75'
+                                    }\`}
+                                    style={{
+                                        transform: currentSection === index ? 'translateZ(10px)' : 'translateZ(0px)',
+                                        transition: 'all 0.4s cubic-bezier(0.23, 1, 0.320, 1)'
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Footer */}
+                    <footer className="fixed bottom-4 right-4 glass-3d rounded-lg px-4 py-2 text-white text-sm z-50">
+                        <div className="flex items-center space-x-2">
+                            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                            <span>3D Portfolio Active</span>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<ThreeDimensionalCV />, document.getElementById('root'));
+    </script>
+</body>
+</html>

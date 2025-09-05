@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React + Framer Motion - Animation Capability Showcase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .magic-gradient {
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 400% 400%;
+            animation: gradientMagic 15s ease infinite;
+        }
+
+        @keyframes gradientMagic {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .variation-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .variation-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(30, 64, 175, 0.3);
+        }
+
+        .holographic-text {
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            animation: holographic 8s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes holographic {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .floating-demo {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(2deg); }
+            50% { transform: translateY(0px) rotate(0deg); }
+            75% { transform: translateY(-5px) rotate(-1deg); }
+        }
+    </style>
+</head>
+<body class="magic-gradient min-h-screen">
+    <div class="container mx-auto px-4 py-12">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="flex items-center justify-center mb-6">
+                <a href="../../../tech-showcase.html" 
+                   class="flex items-center space-x-2 text-white hover:text-pink-200 transition-colors mr-8">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m12 19-7-7 7-7"/>
+                        <path d="M19 12H5"/>
+                    </svg>
+                    <span>Back to Tech Showcase</span>
+                </a>
+                <div class="bg-black/20 text-white px-4 py-2 rounded-full font-bold">
+                    React + Framer Motion
+                </div>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 holographic-text">
+                Advanced Animation Showcase
+            </h1>
+            <p class="text-xl text-blue-100 max-w-4xl mx-auto">
+                Experience Caroline's CV with cutting-edge React + Framer Motion animations - 
+                from basic transitions to physics-based interactions and 3D transforms.
+            </p>
+        </div>
+
+        <!-- Variations Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Variation 1: Current Basic -->
+            <div class="variation-card rounded-2xl p-6 floating-demo">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                        1
+                    </div>
+                    <span class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        ✅ Ready
+                    </span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 text-center">Basic Animations</h3>
+                <p class="text-blue-100 mb-4 text-center">
+                    Smooth transitions, floating elements, and essential React animations
+                </p>
+                <ul class="text-sm text-blue-200 mb-6 space-y-1">
+                    <li>• Fade in/out transitions</li>
+                    <li>• Floating contact badges</li>
+                    <li>• Hover state animations</li>
+                    <li>• Staggered loading effects</li>
+                    <li>• CSS animation integration</li>
+                </ul>
+                <div class="flex gap-3">
+                    <a href="1-current/index.html" class="flex-1 bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-lg font-semibold text-center hover:from-green-600 hover:to-blue-600 transition-all">
+                        View Demo
+                    </a>
+                </div>
+            </div>
+
+            <!-- Variation 2: Advanced Animations -->
+            <div class="variation-card rounded-2xl p-6 floating-demo" style="animation-delay: 0.2s;">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                        2
+                    </div>
+                    <span class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        ✅ Ready
+                    </span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 text-center">Advanced Interactions</h3>
+                <p class="text-blue-100 mb-4 text-center">
+                    Magnetic buttons, cursor tracking, flip cards, and interactive elements
+                </p>
+                <ul class="text-sm text-blue-200 mb-6 space-y-1">
+                    <li>• Magnetic hover effects</li>
+                    <li>• Interactive flip cards</li>
+                    <li>• Cursor trail animations</li>
+                    <li>• Page transition system</li>
+                    <li>• Mouse tracking effects</li>
+                </ul>
+                <div class="flex gap-3">
+                    <a href="2-advanced/index.html" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg font-semibold text-center hover:from-purple-600 hover:to-pink-600 transition-all">
+                        View Demo
+                    </a>
+                </div>
+            </div>
+
+            <!-- Variation 3: Interactive Timeline -->
+            <div class="variation-card rounded-2xl p-6 floating-demo" style="animation-delay: 0.4s;">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                        3
+                    </div>
+                    <span class="bg-orange-200 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        🔨 Building
+                    </span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 text-center">Interactive Timeline</h3>
+                <p class="text-blue-100 mb-4 text-center">
+                    Drag & drop timeline, reorderable experiences, gesture-based navigation
+                </p>
+                <ul class="text-sm text-blue-200 mb-6 space-y-1">
+                    <li>• Drag & drop interface</li>
+                    <li>• Gesture recognition</li>
+                    <li>• Timeline reordering</li>
+                    <li>• Touch interactions</li>
+                    <li>• Physics simulations</li>
+                </ul>
+                <div class="flex gap-3">
+                    <button class="flex-1 bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold cursor-not-allowed">
+                        Coming Soon
+                    </button>
+                </div>
+            </div>
+
+            <!-- Variation 4: 3D Portfolio -->
+            <div class="variation-card rounded-2xl p-6 floating-demo" style="animation-delay: 0.6s;">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-red-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                        4
+                    </div>
+                    <span class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        ✅ Ready
+                    </span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 text-center">3D Portfolio</h3>
+                <p class="text-blue-100 mb-4 text-center">
+                    3D transforms, parallax effects, depth layers, and spatial interactions
+                </p>
+                <ul class="text-sm text-blue-200 mb-6 space-y-1">
+                    <li>• 3D card transformations</li>
+                    <li>• Parallax scrolling effects</li>
+                    <li>• Depth perception layers</li>
+                    <li>• Spatial mouse tracking</li>
+                    <li>• 3D navigation system</li>
+                </ul>
+                <div class="flex gap-3">
+                    <a href="4-3d/index.html" class="flex-1 bg-gradient-to-r from-red-500 to-purple-600 text-white px-4 py-2 rounded-lg font-semibold text-center hover:from-red-600 hover:to-purple-700 transition-all">
+                        View Demo
+                    </a>
+                </div>
+            </div>
+
+            <!-- Variation 5: Game Interface -->
+            <div class="variation-card rounded-2xl p-6 floating-demo" style="animation-delay: 0.8s;">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                        5
+                    </div>
+                    <span class="bg-orange-200 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        🔨 Building
+                    </span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 text-center">Game-like Interface</h3>
+                <p class="text-blue-100 mb-4 text-center">
+                    Physics-based interactions, collision detection, and gamified CV experience
+                </p>
+                <ul class="text-sm text-blue-200 mb-6 space-y-1">
+                    <li>• Physics simulation</li>
+                    <li>• Collision detection</li>
+                    <li>• Interactive particles</li>
+                    <li>• Game mechanics</li>
+                    <li>• Reward animations</li>
+                </ul>
+                <div class="flex gap-3">
+                    <button class="flex-1 bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold cursor-not-allowed">
+                        Coming Soon
+                    </button>
+                </div>
+            </div>
+
+            <!-- Variation 6: Micro-interactions -->
+            <div class="variation-card rounded-2xl p-6 floating-demo" style="animation-delay: 1s;">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                        6
+                    </div>
+                    <span class="bg-orange-200 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        🔨 Building
+                    </span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 text-center">Micro-interactions</h3>
+                <p class="text-blue-100 mb-4 text-center">
+                    Detailed hover effects, state change animations, and polished interactions
+                </p>
+                <ul class="text-sm text-blue-200 mb-6 space-y-1">
+                    <li>• Detailed hover states</li>
+                    <li>• Button press feedback</li>
+                    <li>• Loading animations</li>
+                    <li>• Form interactions</li>
+                    <li>• State change effects</li>
+                </ul>
+                <div class="flex gap-3">
+                    <button class="flex-1 bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold cursor-not-allowed">
+                        Coming Soon
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Animation Capabilities Overview -->
+        <div class="mt-16 variation-card rounded-2xl p-8">
+            <h2 class="text-3xl font-bold text-white mb-6 text-center holographic-text">
+                React + Framer Motion Animation Capabilities
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8 text-white">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-pink-300">🎭 Animation Features</h3>
+                    <ul class="space-y-2 text-blue-100">
+                        <li>• Spring-based physics animations</li>
+                        <li>• Gesture recognition (drag, pan, tap)</li>
+                        <li>• Page and route transitions</li>
+                        <li>• Scroll-triggered animations</li>
+                        <li>• 3D transforms and perspectives</li>
+                        <li>• Morphing and shape animations</li>
+                        <li>• Orchestrated sequence animations</li>
+                        <li>• Performance-optimized rendering</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-purple-300">🚀 React Integration</h3>
+                    <ul class="space-y-2 text-blue-100">
+                        <li>• Component-based animations</li>
+                        <li>• State-driven motion</li>
+                        <li>• Layout animations</li>
+                        <li>• Exit and enter animations</li>
+                        <li>• Shared element transitions</li>
+                        <li>• Animation variants system</li>
+                        <li>• Event-driven interactions</li>
+                        <li>• Accessibility-friendly motion</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Demo Preview Cards -->
+            <div class="mt-8 grid md:grid-cols-2 gap-6">
+                <div class="bg-white/10 p-4 rounded-xl">
+                    <h4 class="font-bold text-white mb-2">🎯 What You'll Experience:</h4>
+                    <ul class="text-sm text-blue-200 space-y-1">
+                        <li>• Magnetic buttons that follow your mouse</li>
+                        <li>• 3D card flips revealing detailed information</li>
+                        <li>• Cursor trail effects and particle systems</li>
+                        <li>• Multi-page navigation with smooth transitions</li>
+                        <li>• Interactive timeline with depth effects</li>
+                    </ul>
+                </div>
+                <div class="bg-white/10 p-4 rounded-xl">
+                    <h4 class="font-bold text-white mb-2">⚡ Performance Features:</h4>
+                    <ul class="text-sm text-blue-200 space-y-1">
+                        <li>• 60fps spring animations</li>
+                        <li>• Hardware-accelerated transforms</li>
+                        <li>• Optimized re-renders</li>
+                        <li>• Gesture-based interactions</li>
+                        <li>• Responsive 3D effects</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('🎭 React + Framer Motion Variations Showcase loaded!');
+        console.log('✨ Showcasing advanced animation capabilities across multiple demos');
+    </script>
+</body>
+</html>

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caroline Williamson - Advanced Animation Portfolio (React + Framer Motion)</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { margin: 0; overflow-x: hidden; }
+        
+        .magic-gradient {
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 400% 400%;
+            animation: gradientMagic 10s ease infinite;
+        }
+
+        @keyframes gradientMagic {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .floating-orb:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-orb:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 5s;
+        }
+
+        .floating-orb:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(90deg); }
+            50% { transform: translateY(-10px) rotate(180deg); }
+            75% { transform: translateY(-30px) rotate(270deg); }
+        }
+
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #1e40af, transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            animation: trail 0.5s ease-out;
+        }
+
+        @keyframes trail {
+            from { transform: scale(0); opacity: 1; }
+            to { transform: scale(1.5); opacity: 0; }
+        }
+
+        .magnetic-hover {
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+        }
+
+        .text-3d {
+            text-shadow: 
+                0 1px 0 #1d4ed8,
+                0 2px 0 #1e3a8a,
+                0 3px 0 #1e3a8a,
+                0 4px 0 #1e3a8a,
+                0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .perspective-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            transition: transform 0.6s;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .flip-card:hover .card-front {
+            transform: rotateY(-180deg);
+        }
+
+        .flip-card:hover .card-back {
+            transform: rotateY(0deg);
+        }
+    </style>
+</head>
+<body class="magic-gradient min-h-screen font-sans overflow-x-hidden">
+    <!-- Floating Background Elements -->
+    <div class="parallax-bg">
+        <div class="floating-orb"></div>
+        <div class="floating-orb"></div>
+        <div class="floating-orb"></div>
+    </div>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        function AdvancedAnimationCV() {
+            const [currentPage, setCurrentPage] = useState(0);
+            const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+            const [isLoaded, setIsLoaded] = useState(false);
+            const [showParticles, setShowParticles] = useState(false);
+            const cursorRef = useRef(null);
+
+            const pages = [
+                { name: "Home", icon: "🏠" },
+                { name: "Experience", icon: "💼" },
+                { name: "Skills", icon: "⚡" },
+                { name: "Contact", icon: "📧" }
+            ];
+
+            useEffect(() => {
+                setIsLoaded(true);
+                setTimeout(() => setShowParticles(true), 1000);
+
+                // Mouse tracking for magnetic effects
+                const handleMouseMove = (e) => {
+                    setMousePosition({ x: e.clientX, y: e.clientY });
+                };
+
+                document.addEventListener('mousemove', handleMouseMove);
+                return () => document.removeEventListener('mousemove', handleMouseMove);
+            }, []);
+
+            // Create cursor trail effect
+            useEffect(() => {
+                const createTrail = (e) => {
+                    const trail = document.createElement('div');
+                    trail.className = 'cursor-trail';
+                    trail.style.left = e.clientX - 10 + 'px';
+                    trail.style.top = e.clientY - 10 + 'px';
+                    document.body.appendChild(trail);
+                    
+                    setTimeout(() => {
+                        trail.remove();
+                    }, 500);
+                };
+
+                document.addEventListener('mousemove', createTrail);
+                return () => document.removeEventListener('mousemove', createTrail);
+            }, []);
+
+            const PageTransition = ({ children, currentPage }) => {
+                return (
+                    <div 
+                        key={currentPage}
+                        style={{
+                            position: 'relative',
+                            opacity: isLoaded ? 1 : 0,
+                            transform: isLoaded ? 'translateY(0)' : 'translateY(20px)',
+                            transition: 'all 0.8s cubic-bezier(0.23, 1, 0.320, 1)'
+                        }}
+                    >
+                        {children}
+                    </div>
+                );
+            };
+
+            const MagneticButton = ({ children, onClick, className = "" }) => {
+                const [isHovered, setIsHovered] = useState(false);
+                const [magnetOffset, setMagnetOffset] = useState({ x: 0, y: 0 });
+                const buttonRef = useRef(null);
+
+                useEffect(() => {
+                    const button = buttonRef.current;
+                    if (!button || !isHovered) return;
+
+                    const rect = button.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const maxOffset = 15;
+
+                    const offsetX = ((mousePosition.x - centerX) / rect.width) * maxOffset;
+                    const offsetY = ((mousePosition.y - centerY) / rect.height) * maxOffset;
+
+                    setMagnetOffset({ x: offsetX, y: offsetY });
+                }, [mousePosition, isHovered]);
+
+                return (
+                    <button
+                        ref={buttonRef}
+                        onClick={onClick}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => {
+                            setIsHovered(false);
+                            setMagnetOffset({ x: 0, y: 0 });
+                        }}
+                        className={\`magnetic-hover \${className}\`}
+                        style={{
+                            transform: \`translate(\${magnetOffset.x}px, \${magnetOffset.y}px) scale(\${isHovered ? 1.05 : 1})\`
+                        }}
+                    >
+                        {children}
+                    </button>
+                );
+            };
+
+            const FloatingSkillCard = ({ skill, index }) => {
+                const [isFlipped, setIsFlipped] = useState(false);
+                
+                return (
+                    <div 
+                        className="perspective-card cursor-pointer"
+                        onClick={() => setIsFlipped(!isFlipped)}
+                        style={{
+                            animationDelay: \`\${index * 0.2}s\`,
+                            opacity: showParticles ? 1 : 0,
+                            transform: showParticles ? 'translateY(0)' : 'translateY(50px)',
+                            transition: 'all 0.6s cubic-bezier(0.23, 1, 0.320, 1)'
+                        }}
+                    >
+                        <div className={\`flip-card relative h-40 \${isFlipped ? '' : ''}\`}>
+                            <div className="card-front glass-morphism h-full rounded-xl p-6 flex flex-col items-center justify-center text-white">
+                                <div className="text-4xl mb-3">{skill.icon}</div>
+                                <h3 className="font-bold text-lg text-center">{skill.name}</h3>
+                            </div>
+                            <div className="card-back glass-morphism h-full rounded-xl p-4 flex flex-col items-center justify-center text-white">
+                                <div className="text-2xl mb-2">{skill.icon}</div>
+                                <h4 className="font-semibold text-sm text-center mb-2">{skill.name}</h4>
+                                <p className="text-xs text-center text-blue-100">{skill.description}</p>
+                                <div className="w-full bg-white/20 rounded-full h-2 mt-3">
+                                    <div 
+                                        className="bg-white h-2 rounded-full transition-all duration-1000"
+                                        style={{ width: \`\${skill.level}%\` }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            const skills = [
+                { name: "Technology Strategy", icon: "🎯", level: 95, description: "20+ years developing technology roadmaps" },
+                { name: "Digital Transformation", icon: "🚀", level: 92, description: "Led $120M transformation programs" },
+                { name: "Team Leadership", icon: "👥", level: 90, description: "250+ team members, 84% engagement" },
+                { name: "AI Strategy", icon: "🤖", level: 88, description: "Microsoft Copilot rollout success" },
+                { name: "Enterprise Architecture", icon: "🏗️", level: 87, description: "Platform consolidation expert" },
+                { name: "Cybersecurity", icon: "🔒", level: 85, description: "APRA CPS230 compliance leadership" }
+            ];
+
+            const experiences = [
+                {
+                    company: "Jemena",
+                    role: "General Manager Corporate Technology",
+                    period: "2024-Current",
+                    color: "from-blue-500 to-indigo-600",
+                    achievements: ["Technology Strategy", "AI Implementation", "Data Platform"],
+                    impact: "$12B energy assets managed"
+                },
+                {
+                    company: "Nutun", 
+                    role: "Chief Technology Officer",
+                    period: "2023-2024",
+                    color: "from-purple-500 to-pink-600",
+                    achievements: ["Strategic Review", "Technical Integration", "Due Diligence"],
+                    impact: "ASX50 company technology transformation"
+                },
+                {
+                    company: "Westpac",
+                    role: "Head of Technology",
+                    period: "2016-2023", 
+                    color: "from-green-500 to-emerald-600",
+                    achievements: ["$200M Budget", "83 Applications", "5M Customers"],
+                    impact: "Enterprise technology leadership"
+                }
+            ];
+
+            return (
+                <div className="min-h-screen relative">
+                    {/* Navigation */}
+                    <nav className="fixed top-0 left-0 right-0 z-50 glass-morphism border-b border-white/20">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="flex justify-between items-center h-16">
+                                <div className="flex items-center space-x-4">
+                                    <a href="../../../tech-showcase.html" className="flex items-center space-x-2 text-white hover:text-blue-200 transition-colors">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path d="m12 19-7-7 7-7"/>
+                                            <path d="M19 12H5"/>
+                                        </svg>
+                                        <span className="hidden sm:inline">Back to Showcase</span>
+                                    </a>
+                                    <div className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold animate-pulse">
+                                        Advanced Framer Motion
+                                    </div>
+                                </div>
+                                
+                                <div className="flex space-x-4">
+                                    {pages.map((page, index) => (
+                                        <MagneticButton
+                                            key={index}
+                                            onClick={() => setCurrentPage(index)}
+                                            className={\`px-4 py-2 rounded-full font-semibold transition-all duration-300 \${
+                                                currentPage === index 
+                                                    ? 'bg-white text-gray-800 shadow-lg' 
+                                                    : 'text-white hover:bg-white/20'
+                                            }\`}
+                                        >
+                                            <span className="mr-2">{page.icon}</span>
+                                            {page.name}
+                                        </MagneticButton>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <div className="pt-16">
+                        <PageTransition currentPage={currentPage}>
+                            {/* Home Page */}
+                            {currentPage === 0 && (
+                                <section className="py-20 px-4 relative">
+                                    <div className="max-w-4xl mx-auto text-center">
+                                        <div 
+                                            className="mb-8"
+                                            style={{
+                                                transform: isLoaded ? 'scale(1) rotateY(0deg)' : 'scale(0.8) rotateY(-90deg)',
+                                                transition: 'all 1.2s cubic-bezier(0.23, 1, 0.320, 1)'
+                                            }}
+                                        >
+                                            <h1 className="text-6xl md:text-8xl font-bold text-white mb-4 text-3d">
+                                                Caroline Williamson
+                                            </h1>
+                                            <p 
+                                                className="text-2xl md:text-3xl text-white font-light"
+                                                style={{
+                                                    opacity: isLoaded ? 1 : 0,
+                                                    transform: isLoaded ? 'translateY(0)' : 'translateY(30px)',
+                                                    transition: 'all 0.8s ease-out 0.5s'
+                                                }}
+                                            >
+                                                Technology Executive & Innovation Leader
+                                            </p>
+                                        </div>
+
+                                        {/* Animated Contact Orbs */}
+                                        <div className="flex justify-center space-x-8 mb-12">
+                                            {[
+                                                { icon: "📞", text: "Call", href: "tel:0458024081" },
+                                                { icon: "✉️", text: "Email", href: "mailto:cparuit@gmail.com" },
+                                                { icon: "🔗", text: "LinkedIn", href: "https://www.linkedin.com/in/caroline-williamson-technology" }
+                                            ].map((contact, index) => (
+                                                <MagneticButton
+                                                    key={index}
+                                                    onClick={() => window.open(contact.href, contact.href.includes('http') ? '_blank' : '_self')}
+                                                    className="w-20 h-20 glass-morphism rounded-full flex flex-col items-center justify-center text-white hover:scale-110 transition-all duration-300"
+                                                    style={{
+                                                        opacity: isLoaded ? 1 : 0,
+                                                        transform: isLoaded ? 'translateY(0) scale(1)' : 'translateY(50px) scale(0)',
+                                                        transition: \`all 0.6s cubic-bezier(0.23, 1, 0.320, 1) \${0.8 + index * 0.2}s\`
+                                                    }}
+                                                >
+                                                    <div className="text-2xl">{contact.icon}</div>
+                                                    <div className="text-xs">{contact.text}</div>
+                                                </MagneticButton>
+                                            ))}
+                                        </div>
+
+                                        {/* Animated Skills Showcase */}
+                                        <div className="text-center mb-12">
+                                            <h2 
+                                                className="text-3xl font-bold text-white mb-8"
+                                                style={{
+                                                    opacity: showParticles ? 1 : 0,
+                                                    transform: showParticles ? 'scale(1)' : 'scale(0.9)',
+                                                    transition: 'all 0.8s cubic-bezier(0.23, 1, 0.320, 1)'
+                                                }}
+                                            >
+                                                Interactive Skills Portfolio
+                                            </h2>
+                                            <p className="text-blue-100 mb-8">Click any skill card to flip and see details</p>
+                                            <div className="grid md:grid-cols-3 gap-6">
+                                                {skills.map((skill, index) => (
+                                                    <FloatingSkillCard key={index} skill={skill} index={index} />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            )}
+
+                            {/* Experience Page with Timeline Animation */}
+                            {currentPage === 1 && (
+                                <section className="py-20 px-4">
+                                    <div className="max-w-6xl mx-auto">
+                                        <h2 className="text-4xl font-bold text-white text-center mb-12 text-3d">
+                                            Career Journey Timeline
+                                        </h2>
+                                        
+                                        <div className="relative">
+                                            {/* Timeline Line */}
+                                            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-white/30 rounded-full"></div>
+                                            
+                                            {experiences.map((exp, index) => (
+                                                <div 
+                                                    key={index}
+                                                    className={\`relative mb-16 \${index % 2 === 0 ? 'md:pr-1/2 md:text-right' : 'md:pl-1/2'}\`}
+                                                    style={{
+                                                        opacity: isLoaded ? 1 : 0,
+                                                        transform: isLoaded ? 'translateX(0)' : \`translateX(\${index % 2 === 0 ? '-100px' : '100px'})\`,
+                                                        transition: \`all 0.8s cubic-bezier(0.23, 1, 0.320, 1) \${index * 0.3}s\`
+                                                    }}
+                                                >
+                                                    {/* Timeline Dot */}
+                                                    <div className={\`absolute \${index % 2 === 0 ? 'right-0 md:-right-6' : 'left-0 md:-left-6'} top-6 w-12 h-12 bg-gradient-to-r \${exp.color} rounded-full border-4 border-white flex items-center justify-center text-white font-bold z-10\`}>
+                                                        {index + 1}
+                                                    </div>
+                                                    
+                                                    {/* Experience Card */}
+                                                    <div className="glass-morphism rounded-2xl p-8 text-white magnetic-hover">
+                                                        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                                                            <div>
+                                                                <h3 className="text-2xl font-bold mb-2">{exp.company}</h3>
+                                                                <h4 className="text-lg font-semibold text-blue-200">{exp.role}</h4>
+                                                            </div>
+                                                            <div className={\`bg-gradient-to-r \${exp.color} px-4 py-2 rounded-full text-sm font-semibold mt-4 md:mt-0\`}>
+                                                                {exp.period}
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <p className="text-lg mb-4 text-blue-100">{exp.impact}</p>
+                                                        
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {exp.achievements.map((achievement, achIndex) => (
+                                                                <span 
+                                                                    key={achIndex}
+                                                                    className="bg-white/20 px-3 py-1 rounded-full text-sm"
+                                                                    style={{
+                                                                        opacity: showParticles ? 1 : 0,
+                                                                        transform: showParticles ? 'scale(1)' : 'scale(0)',
+                                                                        transition: \`all 0.4s ease-out \${(index * 0.3) + (achIndex * 0.1) + 1}s\`
+                                                                    }}
+                                                                >
+                                                                    {achievement}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </section>
+                            )}
+
+                            {/* Skills Page with Particle System */}
+                            {currentPage === 2 && (
+                                <section className="py-20 px-4 relative overflow-hidden">
+                                    <div className="max-w-6xl mx-auto">
+                                        <h2 className="text-4xl font-bold text-white text-center mb-12 text-3d">
+                                            Technology Leadership Matrix
+                                        </h2>
+                                        
+                                        {/* Animated Achievement Grid */}
+                                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                            {[
+                                                { title: "Budget Management", value: "$300M+", icon: "💰", description: "Enterprise budget oversight" },
+                                                { title: "Team Leadership", value: "250+", icon: "👥", description: "FTE managed across matrix orgs" },
+                                                { title: "Customer Impact", value: "5M", icon: "🤝", description: "Customers served globally" },
+                                                { title: "System Uptime", value: "99.8%", icon: "⚡", description: "Service availability achieved" },
+                                                { title: "Cost Reduction", value: "$45M", icon: "📉", description: "Annual savings delivered" },
+                                                { title: "Engagement Score", value: "84%", icon: "📊", description: "Team engagement achieved" }
+                                            ].map((metric, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="glass-morphism rounded-2xl p-8 text-center text-white magnetic-hover cursor-pointer"
+                                                    style={{
+                                                        opacity: isLoaded ? 1 : 0,
+                                                        transform: isLoaded ? 'translateY(0) rotate(0deg)' : 'translateY(100px) rotate(180deg)',
+                                                        transition: \`all 1s cubic-bezier(0.23, 1, 0.320, 1) \${index * 0.2}s\`
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.transform = 'translateY(-10px) scale(1.05)';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                                                    }}
+                                                >
+                                                    <div className="text-5xl mb-4">{metric.icon}</div>
+                                                    <div className="text-3xl font-bold mb-2">{metric.value}</div>
+                                                    <h3 className="text-lg font-semibold mb-2">{metric.title}</h3>
+                                                    <p className="text-blue-100 text-sm">{metric.description}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Floating Particles */}
+                                    {showParticles && Array.from({length: 20}, (_, i) => (
+                                        <div
+                                            key={i}
+                                            className="absolute w-2 h-2 bg-white/30 rounded-full"
+                                            style={{
+                                                left: \`\${Math.random() * 100}%\`,
+                                                top: \`\${Math.random() * 100}%\`,
+                                                animation: \`float \${15 + Math.random() * 10}s ease-in-out infinite\`,
+                                                animationDelay: \`\${Math.random() * 5}s\`
+                                            }}
+                                        />
+                                    ))}
+                                </section>
+                            )}
+
+                            {/* Contact Page with Interactive Form */}
+                            {currentPage === 3 && (
+                                <section className="py-20 px-4">
+                                    <div className="max-w-2xl mx-auto">
+                                        <h2 className="text-4xl font-bold text-white text-center mb-12 text-3d">
+                                            Let's Connect
+                                        </h2>
+                                        
+                                        <div 
+                                            className="glass-morphism rounded-2xl p-8"
+                                            style={{
+                                                opacity: isLoaded ? 1 : 0,
+                                                transform: isLoaded ? 'translateY(0) scale(1)' : 'translateY(50px) scale(0.9)',
+                                                transition: 'all 0.8s cubic-bezier(0.23, 1, 0.320, 1) 0.3s'
+                                            }}
+                                        >
+                                            <form className="space-y-6">
+                                                <div className="grid md:grid-cols-2 gap-6">
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="Your Name"
+                                                        className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all magnetic-hover"
+                                                    />
+                                                    <input 
+                                                        type="email" 
+                                                        placeholder="Your Email"
+                                                        className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all magnetic-hover"
+                                                    />
+                                                </div>
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="Subject"
+                                                    className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all magnetic-hover"
+                                                />
+                                                <textarea 
+                                                    rows="6" 
+                                                    placeholder="Your Message"
+                                                    className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all magnetic-hover resize-none"
+                                                ></textarea>
+                                                
+                                                <MagneticButton
+                                                    className="w-full bg-white text-gray-800 py-4 rounded-lg font-bold text-lg shadow-lg hover:shadow-2xl"
+                                                    onClick={() => alert('Message sent! This showcases Framer Motion form interactions and API integration capabilities.')}
+                                                >
+                                                    🚀 Send Message with Animation
+                                                </MagneticButton>
+                                            </form>
+                                        </div>
+
+                                        {/* Direct Contact Options */}
+                                        <div className="mt-12 text-center">
+                                            <p className="text-blue-100 mb-6">Or connect directly:</p>
+                                            <div className="flex flex-wrap justify-center gap-6">
+                                                <MagneticButton 
+                                                    className="glass-morphism px-8 py-4 rounded-full text-white font-semibold hover:scale-110"
+                                                    onClick={() => window.open('tel:0458024081')}
+                                                >
+                                                    📞 0458 024 081
+                                                </MagneticButton>
+                                                <MagneticButton 
+                                                    className="glass-morphism px-8 py-4 rounded-full text-white font-semibold hover:scale-110"
+                                                    onClick={() => window.open('mailto:cparuit@gmail.com')}
+                                                >
+                                                    ✉️ cparuit@gmail.com
+                                                </MagneticButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            )}
+                        </PageTransition>
+                    </div>
+
+                    {/* Page Indicator */}
+                    <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+                        <div className="flex space-x-3">
+                            {pages.map((_, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setCurrentPage(index)}
+                                    className={\`w-3 h-3 rounded-full transition-all duration-300 \${
+                                        currentPage === index 
+                                            ? 'bg-white scale-125' 
+                                            : 'bg-white/50 hover:bg-white/75'
+                                    }\`}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Footer */}
+                    <footer className="fixed bottom-4 right-4 glass-morphism rounded-lg px-4 py-2 text-white text-sm">
+                        🎭 React + Framer Motion - Advanced Interactions Demo
+                    </footer>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<AdvancedAnimationCV />, document.getElementById('root'));
+    </script>
+</body>
+</html>
