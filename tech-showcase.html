@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caroline Williamson CV - Technology Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 300;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .header .description {
+            font-size: 1.1em;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .tech-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #FF6900, #E15D00);
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .tech-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .tech-number {
+            background: linear-gradient(135deg, #FF6900, #E15D00);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .tech-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .tech-description {
+            color: #4a5568;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .tech-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .tech-features li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .tech-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #FF6900;
+            font-weight: bold;
+        }
+
+        .tech-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #FF6900;
+            font-size: 1.2em;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .tech-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6900, #E15D00);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #E15D00, #CC5500);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #FF6900;
+            border: 2px solid #FF6900;
+        }
+
+        .btn-secondary:hover {
+            background: #FF6900;
+            color: white;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .status-ready {
+            background: #48bb78;
+            color: white;
+        }
+
+        .status-building {
+            background: #ed8936;
+            color: white;
+        }
+
+        .status-planned {
+            background: #cbd5e0;
+            color: #4a5568;
+        }
+
+        .comparison-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .comparison-title {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #2d3748;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #FF6900, #E15D00);
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(255, 105, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tech-buttons {
+                flex-direction: column;
+            }
+            
+            .tech-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Caroline Williamson</h1>
+            <div class="subtitle">Executive Technology Leader</div>
+            <div class="description">
+                Experience the same professional CV built with 6 different modern web technologies. 
+                Compare performance, design patterns, and developer experience across the latest frameworks.
+            </div>
+        </header>
+
+        <div class="tech-grid">
+            <div class="tech-card">
+                <div class="status-badge status-ready">Ready</div>
+                <div class="tech-header">
+                    <div class="tech-number">1</div>
+                    <div class="tech-title">Next.js + Tailwind CSS</div>
+                </div>
+                <div class="tech-description">
+                    Production-ready React framework with server-side rendering and the most popular utility-first CSS framework.
+                </div>
+                <ul class="tech-features">
+                    <li>Server-side rendering (SSR)</li>
+                    <li>Automatic code splitting</li>
+                    <li>Utility-first CSS</li>
+                    <li>Excellent SEO</li>
+                    <li>Built-in optimization</li>
+                </ul>
+                <div class="tech-stats">
+                    <div class="stat">
+                        <div class="stat-value">A+</div>
+                        <div class="stat-label">Performance</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">High</div>
+                        <div class="stat-label">Popularity</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Fast</div>
+                        <div class="stat-label">Dev Speed</div>
+                    </div>
+                </div>
+                <div class="tech-buttons">
+                    <a href="implementations/1-nextjs-tailwind/" class="btn btn-primary">View Demo</a>
+                    <a href="#" class="btn btn-secondary">View Code</a>
+                </div>
+            </div>
+
+            <div class="tech-card">
+                <div class="status-badge status-building">Building</div>
+                <div class="tech-header">
+                    <div class="tech-number">2</div>
+                    <div class="tech-title">React + Framer Motion</div>
+                </div>
+                <div class="tech-description">
+                    React with the most powerful animation library for smooth, professional micro-interactions and page transitions.
+                </div>
+                <ul class="tech-features">
+                    <li>Smooth animations</li>
+                    <li>Gesture recognition</li>
+                    <li>Page transitions</li>
+                    <li>Micro-interactions</li>
+                    <li>Performance optimized</li>
+                </ul>
+                <div class="tech-stats">
+                    <div class="stat">
+                        <div class="stat-value">A</div>
+                        <div class="stat-label">Performance</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">High</div>
+                        <div class="stat-label">Visual Appeal</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Medium</div>
+                        <div class="stat-label">Complexity</div>
+                    </div>
+                </div>
+                <div class="tech-buttons">
+                    <a href="#" class="btn btn-primary" style="opacity: 0.6; cursor: not-allowed;">Coming Soon</a>
+                    <a href="#" class="btn btn-secondary">View Code</a>
+                </div>
+            </div>
+
+            <div class="tech-card">
+                <div class="status-badge status-planned">Planned</div>
+                <div class="tech-header">
+                    <div class="tech-number">3</div>
+                    <div class="tech-title">Vue 3 + Tailwind CSS</div>
+                </div>
+                <div class="tech-description">
+                    Progressive JavaScript framework known for its simplicity and gentle learning curve, paired with Tailwind CSS.
+                </div>
+                <ul class="tech-features">
+                    <li>Composition API</li>
+                    <li>Reactive data binding</li>
+                    <li>Single file components</li>
+                    <li>Excellent documentation</li>
+                    <li>Small bundle size</li>
+                </ul>
+                <div class="tech-stats">
+                    <div class="stat">
+                        <div class="stat-value">A+</div>
+                        <div class="stat-label">Learning Curve</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Small</div>
+                        <div class="stat-label">Bundle Size</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Fast</div>
+                        <div class="stat-label">Runtime</div>
+                    </div>
+                </div>
+                <div class="tech-buttons">
+                    <a href="#" class="btn btn-primary" style="opacity: 0.6; cursor: not-allowed;">Coming Soon</a>
+                    <a href="#" class="btn btn-secondary">View Code</a>
+                </div>
+            </div>
+
+            <div class="tech-card">
+                <div class="status-badge status-planned">Planned</div>
+                <div class="tech-header">
+                    <div class="tech-number">4</div>
+                    <div class="tech-title">Svelte + SvelteKit</div>
+                </div>
+                <div class="tech-description">
+                    Compile-time optimized framework that disappears at runtime, delivering the smallest possible bundle sizes.
+                </div>
+                <ul class="tech-features">
+                    <li>No virtual DOM</li>
+                    <li>Compile-time optimization</li>
+                    <li>Built-in state management</li>
+                    <li>Minimal runtime</li>
+                    <li>Great performance</li>
+                </ul>
+                <div class="tech-stats">
+                    <div class="stat">
+                        <div class="stat-value">A++</div>
+                        <div class="stat-label">Performance</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Tiny</div>
+                        <div class="stat-label">Bundle</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Modern</div>
+                        <div class="stat-label">Approach</div>
+                    </div>
+                </div>
+                <div class="tech-buttons">
+                    <a href="#" class="btn btn-primary" style="opacity: 0.6; cursor: not-allowed;">Coming Soon</a>
+                    <a href="#" class="btn btn-secondary">View Code</a>
+                </div>
+            </div>
+
+            <div class="tech-card">
+                <div class="status-badge status-planned">Planned</div>
+                <div class="tech-header">
+                    <div class="tech-number">5</div>
+                    <div class="tech-title">React + Chakra UI</div>
+                </div>
+                <div class="tech-description">
+                    React with a comprehensive component library focused on accessibility and developer experience.
+                </div>
+                <ul class="tech-features">
+                    <li>Rich component library</li>
+                    <li>Accessibility first</li>
+                    <li>Theme customization</li>
+                    <li>TypeScript support</li>
+                    <li>Great DX</li>
+                </ul>
+                <div class="tech-stats">
+                    <div class="stat">
+                        <div class="stat-value">A+</div>
+                        <div class="stat-label">Accessibility</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Rich</div>
+                        <div class="stat-label">Components</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Fast</div>
+                        <div class="stat-label">Development</div>
+                    </div>
+                </div>
+                <div class="tech-buttons">
+                    <a href="#" class="btn btn-primary" style="opacity: 0.6; cursor: not-allowed;">Coming Soon</a>
+                    <a href="#" class="btn btn-secondary">View Code</a>
+                </div>
+            </div>
+
+            <div class="tech-card">
+                <div class="status-badge status-planned">Planned</div>
+                <div class="tech-header">
+                    <div class="tech-number">6</div>
+                    <div class="tech-title">Astro + Tailwind</div>
+                </div>
+                <div class="tech-description">
+                    Static site generator that ships zero JavaScript by default, perfect for content-heavy sites like portfolios.
+                </div>
+                <ul class="tech-features">
+                    <li>Zero JS by default</li>
+                    <li>Component agnostic</li>
+                    <li>Ultra-fast loading</li>
+                    <li>SEO optimized</li>
+                    <li>Islands architecture</li>
+                </ul>
+                <div class="tech-stats">
+                    <div class="stat">
+                        <div class="stat-value">A++</div>
+                        <div class="stat-label">Speed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Perfect</div>
+                        <div class="stat-label">SEO</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Minimal</div>
+                        <div class="stat-label">JS</div>
+                    </div>
+                </div>
+                <div class="tech-buttons">
+                    <a href="#" class="btn btn-primary" style="opacity: 0.6; cursor: not-allowed;">Coming Soon</a>
+                    <a href="#" class="btn btn-secondary">View Code</a>
+                </div>
+            </div>
+        </div>
+
+        <section class="comparison-section">
+            <h2 class="comparison-title">Technology Comparison</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Technology</th>
+                        <th>Performance</th>
+                        <th>Bundle Size</th>
+                        <th>Learning Curve</th>
+                        <th>Ecosystem</th>
+                        <th>Best For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Next.js + Tailwind</strong></td>
+                        <td>Excellent</td>
+                        <td>Medium</td>
+                        <td>Medium</td>
+                        <td>Huge</td>
+                        <td>Production apps</td>
+                    </tr>
+                    <tr>
+                        <td><strong>React + Framer Motion</strong></td>
+                        <td>Good</td>
+                        <td>Medium-Large</td>
+                        <td>Medium-High</td>
+                        <td>Large</td>
+                        <td>Interactive UIs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vue 3 + Tailwind</strong></td>
+                        <td>Excellent</td>
+                        <td>Small-Medium</td>
+                        <td>Low</td>
+                        <td>Large</td>
+                        <td>Rapid development</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Svelte + SvelteKit</strong></td>
+                        <td>Outstanding</td>
+                        <td>Tiny</td>
+                        <td>Medium</td>
+                        <td>Growing</td>
+                        <td>Performance critical</td>
+                    </tr>
+                    <tr>
+                        <td><strong>React + Chakra UI</strong></td>
+                        <td>Good</td>
+                        <td>Large</td>
+                        <td>Low-Medium</td>
+                        <td>Large</td>
+                        <td>Component-heavy apps</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Astro + Tailwind</strong></td>
+                        <td>Outstanding</td>
+                        <td>Tiny</td>
+                        <td>Low-Medium</td>
+                        <td>Growing</td>
+                        <td>Static sites</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        // Add some subtle animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.tech-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
