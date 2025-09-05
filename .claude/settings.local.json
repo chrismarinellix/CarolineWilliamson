@@ -15,7 +15,8 @@
       "Bash(start implementations/3-vue-tailwind/index.html)",
       "Bash(start implementations/4-svelte-sveltekit/index.html)",
       "Bash(start implementations/5-react-chakra/index.html)",
-      "Bash(start implementations/6-astro-tailwind/index.html)"
+      "Bash(start implementations/6-astro-tailwind/index.html)",
+      "WebFetch(domain:carolinewilliamson.netlify.app)"
     ],
     "deny": [],
     "ask": []
