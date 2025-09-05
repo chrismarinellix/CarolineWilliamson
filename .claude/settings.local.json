@@ -6,7 +6,11 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(npm init:*)"
+      "Bash(npm init:*)",
+      "Bash(start tech-showcase.html)",
+      "Bash(npm install)",
+      "Bash(npm run dev:*)",
+      "Bash(start implementations/1-nextjs-tailwind/standalone.html)"
     ],
     "deny": [],
     "ask": []
