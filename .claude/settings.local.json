@@ -27,7 +27,8 @@
       "Bash(start implementations/4-svelte-sveltekit/variations/2-performance/index.html)",
       "Bash(start implementations/5-react-chakra/variations/2-accessibility/index.html)",
       "Bash(start implementations/6-astro-tailwind/variations/6-multiframework/index.html)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(start index.html)"
     ],
     "deny": [],
     "ask": []
