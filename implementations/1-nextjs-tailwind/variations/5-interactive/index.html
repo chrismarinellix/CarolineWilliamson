@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caroline Williamson - Interactive Portfolio (Next.js Advanced Interactions)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#1e40af',
+                            600: '#1d4ed8',
+                            700: '#1e3a8a'
+                        }
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                        'pulse-fast': 'pulse 1s infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'slide-in': 'slideIn 0.8s ease-out',
+                        'fade-in-up': 'fadeInUp 0.6s ease-out',
+                        'zoom-in': 'zoomIn 0.5s ease-out',
+                        'rotate-in': 'rotateIn 1s ease-out',
+                    },
+                    keyframes: {
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(-100%)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        fadeInUp: {
+                            '0%': { transform: 'translateY(30px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        zoomIn: {
+                            '0%': { transform: 'scale(0)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                        rotateIn: {
+                            '0%': { transform: 'rotate(-360deg) scale(0)', opacity: '0' },
+                            '100%': { transform: 'rotate(0deg) scale(1)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .interactive-bg {
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 400% 400%;
+            animation: gradientFlow 20s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-interactive {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-12px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .morphing-button {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .morphing-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .morphing-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .interactive-card {
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+            transform-style: preserve-3d;
+        }
+
+        .interactive-card:hover {
+            transform: rotateY(10deg) rotateX(5deg) translateZ(20px);
+        }
+
+        .parallax-element {
+            will-change: transform;
+        }
+
+        .glow-on-hover {
+            transition: all 0.3s ease;
+        }
+
+        .glow-on-hover:hover {
+            box-shadow: 0 0 30px rgba(30, 64, 175, 0.6), 0 0 60px rgba(30, 64, 175, 0.4);
+            transform: scale(1.02);
+        }
+
+        .typing-animation {
+            border-right: 3px solid #1e40af;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { border-color: transparent; }
+            51%, 100% { border-color: #1e40af; }
+        }
+
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .ripple:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="interactive-bg min-h-screen">
+    <!-- Navigation with Interactive Elements -->
+    <nav class="glass-interactive sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="../../tech-showcase.html" class="flex items-center space-x-2 text-white hover:text-blue-200 transition-colors">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m12 19-7-7 7-7"/>
+                            <path d="M19 12H5"/>
+                        </svg>
+                        <span class="hidden sm:inline">Back to Showcase</span>
+                    </a>
+                    <div class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold animate-pulse-fast">
+                        Next.js Interactive Demo
+                    </div>
+                </div>
+                
+                <button id="themeToggle" class="morphing-button bg-white/20 text-white px-4 py-2 rounded-lg hover:bg-white/30 transition-all">
+                    🎨 Dynamic Theme
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Typing Animation -->
+    <section class="py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="glass-interactive rounded-3xl p-12 hover-lift">
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6">
+                    Caroline Williamson
+                </h1>
+                <div class="text-2xl md:text-3xl text-blue-100 mb-8 typing-animation" id="typingText">
+                    Executive Technology Leader
+                </div>
+                <p class="text-lg text-blue-200 max-w-2xl mx-auto mb-8 animate-fade-in-up">
+                    This interactive portfolio showcases Next.js advanced capabilities including 
+                    intersection observers, dynamic imports, micro-interactions, and performance optimizations.
+                </p>
+                
+                <!-- Interactive Contact Buttons -->
+                <div class="flex flex-wrap justify-center gap-6">
+                    <button class="morphing-button glass-interactive px-8 py-4 rounded-full text-white font-semibold glow-on-hover ripple" 
+                            onclick="handleContact('phone')">
+                        <span class="relative z-10">📞 0458 024 081</span>
+                    </button>
+                    <button class="morphing-button glass-interactive px-8 py-4 rounded-full text-white font-semibold glow-on-hover ripple" 
+                            onclick="handleContact('email')">
+                        <span class="relative z-10">✉️ cparuit@gmail.com</span>
+                    </button>
+                    <button class="morphing-button glass-interactive px-8 py-4 rounded-full text-white font-semibold glow-on-hover ripple" 
+                            onclick="handleContact('linkedin')">
+                        <span class="relative z-10">🔗 LinkedIn</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Skills Matrix -->
+    <section class="py-16 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold text-white text-center mb-12 scroll-reveal">
+                🎯 Interactive Skills Assessment
+            </h2>
+            <p class="text-xl text-blue-100 text-center mb-12 scroll-reveal">
+                Hover, click, and interact with skill cards. Watch them respond with advanced animations.
+            </p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="skillsGrid">
+                <!-- Skills will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Parallax Experience Section -->
+    <section class="py-16 px-4 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold text-white text-center mb-12 scroll-reveal">
+                🚀 Career Journey with Parallax
+            </h2>
+            
+            <div class="space-y-16" id="experienceTimeline">
+                <!-- Experience items will be populated -->
+            </div>
+        </div>
+        
+        <!-- Parallax Background Elements -->
+        <div class="parallax-element absolute top-0 left-0 w-full h-full pointer-events-none" id="parallaxBg">
+            <!-- Animated background shapes -->
+        </div>
+    </section>
+
+    <!-- Interactive Achievements Gallery -->
+    <section class="py-16 px-4">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold text-white text-center mb-12 scroll-reveal">
+                🏆 Achievement Showcase
+            </h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" id="achievementsGrid">
+                <!-- Achievements will be populated -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 glass-interactive">
+        <div class="max-w-4xl mx-auto text-center px-4">
+            <p class="text-white mb-4">
+                Next.js Interactive Portfolio - Advanced Micro-interactions & Performance
+            </p>
+            <div class="flex justify-center space-x-4 flex-wrap">
+                <span class="bg-yellow-600 px-3 py-1 rounded text-sm text-white">Intersection Observer</span>
+                <span class="bg-green-600 px-3 py-1 rounded text-sm text-white">Dynamic Imports</span>
+                <span class="bg-purple-600 px-3 py-1 rounded text-sm text-white">Micro-interactions</span>
+                <span class="bg-red-600 px-3 py-1 rounded text-sm text-white">Lazy Loading</span>
+                <span class="bg-blue-600 px-3 py-1 rounded text-sm text-white">Advanced Animations</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Skills data with interactive properties
+        const skills = [
+            { 
+                name: "Technology Strategy", 
+                level: 95, 
+                icon: "🎯", 
+                description: "20+ years developing comprehensive technology roadmaps",
+                projects: ["Jemena 5-Year Roadmap", "Westpac Technology Strategy", "Nutun Strategic Review"],
+                interactive: true
+            },
+            { 
+                name: "Digital Transformation", 
+                level: 92, 
+                icon: "🚀", 
+                description: "$120M+ transformation programs led successfully",
+                projects: ["Advice Remediation Program", "Procurement Transformation", "Digital Journey Hub"],
+                interactive: true
+            },
+            { 
+                name: "Team Leadership", 
+                level: 90, 
+                icon: "👥", 
+                description: "250+ team members, 84% engagement achieved",
+                projects: ["High Performance Teams", "Women in Tech Network", "Leadership Development"],
+                interactive: true
+            },
+            { 
+                name: "AI & Data Strategy", 
+                level: 88, 
+                icon: "🤖", 
+                description: "Microsoft Copilot rollout and data platform implementation",
+                projects: ["AI Week Launch", "Copilot Implementation", "Data Governance"],
+                interactive: true
+            },
+            { 
+                name: "Enterprise Architecture", 
+                level: 87, 
+                icon: "🏗️", 
+                description: "Complex system consolidation and platform design",
+                projects: ["Customer Complaints Consolidation", "Enterprise Platforms", "System Modernization"],
+                interactive: true
+            },
+            { 
+                name: "Cybersecurity", 
+                level: 85, 
+                icon: "🔒", 
+                description: "APRA CPS230 compliance and security strategy",
+                projects: ["Physical Security Implementation", "Risk Assessment", "Security Standards"],
+                interactive: true
+            }
+        ];
+
+        const experiences = [
+            {
+                company: "Jemena",
+                role: "General Manager Corporate Technology",
+                period: "2024-Current",
+                description: "$12B energy assets | Corporate functions digital transformation",
+                achievements: ["Technology Strategy", "AI Implementation", "Team Restructuring"],
+                color: "from-blue-500 to-indigo-600"
+            },
+            {
+                company: "Nutun",
+                role: "Chief Technology Officer", 
+                period: "2023-2024",
+                description: "ASX50 companies | Debt recovery & legal services technology",
+                achievements: ["IT Due Diligence", "Strategic Review", "Technical Integration"],
+                color: "from-purple-500 to-pink-600"
+            },
+            {
+                company: "Westpac",
+                role: "Head of Technology",
+                period: "2016-2023",
+                description: "$200M+ budget | 83 applications | 5M customers",
+                achievements: ["Enterprise Leadership", "Cost Reduction", "System Modernization"],
+                color: "from-green-500 to-emerald-600"
+            }
+        ];
+
+        const achievements = [
+            { icon: "💰", title: "$300M+", subtitle: "Budgets Managed", description: "Enterprise-scale financial oversight" },
+            { icon: "👥", title: "250+", subtitle: "Team Members", description: "High-performance team leadership" },
+            { icon: "📈", title: "84%", subtitle: "Engagement", description: "Team satisfaction achieved" },
+            { icon: "⚡", title: "99.8%", subtitle: "Uptime", description: "Service availability target" },
+            { icon: "🎯", title: "5M", subtitle: "Customers", description: "Global customer impact" },
+            { icon: "💡", title: "$45M", subtitle: "Savings", description: "Annual cost reductions" },
+            { icon: "🚀", title: "12", subtitle: "Partners", description: "AI Week strategic partners" },
+            { icon: "🔧", title: "83", subtitle: "Applications", description: "Enterprise systems managed" }
+        ];
+
+        let currentTheme = 0;
+        const themes = ['interactive-bg', 'bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900', 'bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900'];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderSkills();
+            renderExperience();
+            renderAchievements();
+            initializeScrollReveal();
+            initializeParallax();
+            startTypingAnimation();
+            createFloatingElements();
+        });
+
+        // Render interactive skills
+        function renderSkills() {
+            const grid = document.getElementById('skillsGrid');
+            grid.innerHTML = skills.map((skill, index) => \`
+                <div class="interactive-card glass-interactive rounded-xl p-6 hover-lift cursor-pointer scroll-reveal"
+                     onclick="showSkillDetails(\${index})"
+                     onmouseenter="animateSkillCard(\${index}, true)"
+                     onmouseleave="animateSkillCard(\${index}, false)"
+                     style="animation-delay: \${index * 0.1}s">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4 animate-bounce-slow" style="animation-delay: \${index * 0.2}s">
+                            \${skill.icon}
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">\${skill.name}</h3>
+                        <div class="mb-4">
+                            <div class="bg-white/20 rounded-full h-3 overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-blue-400 to-purple-500 rounded-full transition-all duration-1000" 
+                                     style="width: 0%" 
+                                     id="progress-\${index}"></div>
+                            </div>
+                            <div class="text-white text-sm mt-2">\${skill.level}% Expertise</div>
+                        </div>
+                        <p class="text-blue-100 text-sm mb-4">\${skill.description}</p>
+                        <button class="morphing-button bg-white/20 text-white px-4 py-2 rounded-lg hover:bg-white/30 transition-all text-sm">
+                            View Projects →
+                        </button>
+                    </div>
+                </div>
+            \`).join('');
+
+            // Animate progress bars after render
+            setTimeout(() => {
+                skills.forEach((skill, index) => {
+                    const progressBar = document.getElementById(\`progress-\${index}\`);
+                    if (progressBar) {
+                        progressBar.style.width = skill.level + '%';
+                    }
+                });
+            }, 500);
+        }
+
+        // Render experience timeline
+        function renderExperience() {
+            const timeline = document.getElementById('experienceTimeline');
+            timeline.innerHTML = experiences.map((exp, index) => \`
+                <div class="glass-interactive rounded-xl p-8 hover-lift scroll-reveal interactive-card"
+                     style="animation-delay: \${index * 0.3}s">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div class="parallax-element" data-speed="\${0.5 + index * 0.1}">
+                            <h3 class="text-3xl font-bold text-white mb-2 animate-slide-in">\${exp.company}</h3>
+                            <h4 class="text-xl font-semibold text-blue-200 mb-4 animate-fade-in-up">\${exp.role}</h4>
+                            <div class="bg-gradient-to-r \${exp.color} text-white px-4 py-2 rounded-full inline-block text-sm font-semibold animate-zoom-in">
+                                \${exp.period}
+                            </div>
+                        </div>
+                        <div class="parallax-element" data-speed="\${0.3 + index * 0.1}">
+                            <p class="text-blue-100 mb-4 animate-fade-in-up">\${exp.description}</p>
+                            <div class="space-y-2">
+                                \${exp.achievements.map((achievement, achIndex) => \`
+                                    <div class="bg-white/10 p-2 rounded-lg text-white hover:bg-white/20 transition-all cursor-pointer animate-slide-in"
+                                         style="animation-delay: \${(index * 0.3) + (achIndex * 0.1)}s"
+                                         onmouseenter="this.style.transform='translateX(10px)'"
+                                         onmouseleave="this.style.transform='translateX(0)'">
+                                        <span class="text-blue-300">▶</span> \${achievement}
+                                    </div>
+                                \`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            \`).join('');
+        }
+
+        // Render interactive achievements
+        function renderAchievements() {
+            const grid = document.getElementById('achievementsGrid');
+            grid.innerHTML = achievements.map((achievement, index) => \`
+                <div class="glass-interactive rounded-xl p-6 text-center hover-lift cursor-pointer scroll-reveal glow-on-hover"
+                     onclick="showAchievementDetail(\${index})"
+                     style="animation-delay: \${index * 0.1}s">
+                    <div class="text-4xl mb-4 animate-rotate-in" style="animation-delay: \${index * 0.2}s">
+                        \${achievement.icon}
+                    </div>
+                    <div class="text-2xl font-bold text-white mb-2">\${achievement.title}</div>
+                    <div class="text-blue-200 font-semibold mb-2">\${achievement.subtitle}</div>
+                    <p class="text-blue-100 text-sm">\${achievement.description}</p>
+                </div>
+            \`).join('');
+        }
+
+        // Skill card animations
+        function animateSkillCard(index, isHover) {
+            const card = document.querySelectorAll('.interactive-card')[index];
+            if (card) {
+                if (isHover) {
+                    card.style.transform = 'rotateY(15deg) rotateX(10deg) translateZ(30px) scale(1.05)';
+                    card.style.boxShadow = '0 30px 60px rgba(30, 64, 175, 0.4)';
+                } else {
+                    card.style.transform = 'rotateY(0deg) rotateX(0deg) translateZ(0px) scale(1)';
+                    card.style.boxShadow = '0 15px 30px rgba(30, 64, 175, 0.2)';
+                }
+            }
+        }
+
+        // Show skill details (simulating Next.js dynamic routing)
+        function showSkillDetails(index) {
+            const skill = skills[index];
+            alert(\`Skill Deep Dive: \${skill.name}\\n\\nExpertise Level: \${skill.level}%\\n\\n\${skill.description}\\n\\nKey Projects:\\n\${skill.projects.join('\\n• ')}\\n\\nThis showcases Next.js dynamic routing and modal capabilities!\`);
+        }
+
+        // Show achievement details
+        function showAchievementDetail(index) {
+            const achievement = achievements[index];
+            alert(\`Achievement Details:\\n\\n\${achievement.title} - \${achievement.subtitle}\\n\\n\${achievement.description}\\n\\nThis demonstrates Next.js component interaction and state management!\`);
+        }
+
+        // Contact handlers
+        function handleContact(type) {
+            const contacts = {
+                phone: 'tel:0458024081',
+                email: 'mailto:cparuit@gmail.com', 
+                linkedin: 'https://www.linkedin.com/in/caroline-williamson-technology'
+            };
+            
+            if (type === 'linkedin') {
+                window.open(contacts[type], '_blank');
+            } else {
+                window.open(contacts[type]);
+            }
+        }
+
+        // Theme toggle
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            currentTheme = (currentTheme + 1) % themes.length;
+            document.body.className = themes[currentTheme] + ' min-h-screen transition-all duration-1000';
+        });
+
+        // Scroll reveal animation
+        function initializeScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Parallax effects
+        function initializeParallax() {
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const elements = document.querySelectorAll('.parallax-element');
+                
+                elements.forEach(element => {
+                    const speed = element.dataset.speed || 0.5;
+                    const yPos = -(scrolled * speed);
+                    element.style.transform = \`translateY(\${yPos}px)\`;
+                });
+            });
+        }
+
+        // Typing animation
+        function startTypingAnimation() {
+            const texts = [
+                "Executive Technology Leader",
+                "Digital Transformation Expert", 
+                "AI Strategy Specialist",
+                "Team Performance Coach",
+                "Enterprise Architecture Guru"
+            ];
+            
+            let currentText = 0;
+            let currentChar = 0;
+            let isDeleting = false;
+            
+            function typeText() {
+                const element = document.getElementById('typingText');
+                const fullText = texts[currentText];
+                
+                if (isDeleting) {
+                    element.textContent = fullText.substring(0, currentChar - 1);
+                    currentChar--;
+                } else {
+                    element.textContent = fullText.substring(0, currentChar + 1);
+                    currentChar++;
+                }
+
+                let typeSpeed = isDeleting ? 50 : 100;
+
+                if (!isDeleting && currentChar === fullText.length) {
+                    typeSpeed = 2000;
+                    isDeleting = true;
+                } else if (isDeleting && currentChar === 0) {
+                    isDeleting = false;
+                    currentText = (currentText + 1) % texts.length;
+                }
+
+                setTimeout(typeText, typeSpeed);
+            }
+            
+            typeText();
+        }
+
+        // Create floating background elements
+        function createFloatingElements() {
+            const parallaxBg = document.getElementById('parallaxBg');
+            for (let i = 0; i < 15; i++) {
+                const element = document.createElement('div');
+                element.className = 'absolute w-2 h-2 bg-white/20 rounded-full animate-float';
+                element.style.left = Math.random() * 100 + '%';
+                element.style.top = Math.random() * 100 + '%';
+                element.style.animationDelay = Math.random() * 5 + 's';
+                element.style.animationDuration = (10 + Math.random() * 10) + 's';
+                parallaxBg.appendChild(element);
+            }
+        }
+
+        // Simulate Next.js features
+        console.log('🎮 Next.js Interactive Portfolio loaded!');
+        console.log('⚡ Showcasing: Intersection Observer, Dynamic Imports, Micro-interactions');
+        console.log('🎨 Features: Theme switching, parallax, scroll animations, typing effects');
+    </script>
+</body>
+</html>

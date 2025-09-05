@@ -19,7 +19,10 @@
       "WebFetch(domain:carolinewilliamson.netlify.app)",
       "Bash(start implementations/1-nextjs-tailwind/variations/index.html)",
       "Bash(start implementations/1-nextjs-tailwind/variations/2-ecommerce/index.html)",
-      "Bash(start implementations/1-nextjs-tailwind/variations/4-dashboard/index.html)"
+      "Bash(start implementations/1-nextjs-tailwind/variations/4-dashboard/index.html)",
+      "Bash(start implementations/2-react-framer/variations/index.html)",
+      "Bash(start implementations/2-react-framer/variations/2-advanced/index.html)",
+      "Bash(start implementations/2-react-framer/variations/4-3d/index.html)"
     ],
     "deny": [],
     "ask": []
