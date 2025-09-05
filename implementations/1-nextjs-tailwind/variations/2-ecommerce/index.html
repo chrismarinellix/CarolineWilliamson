@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caroline Williamson - Professional Services Marketplace (Next.js E-commerce Demo)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#1e40af',
+                            600: '#1d4ed8',
+                            700: '#1e3a8a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(30, 64, 175, 0.1);
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(30, 64, 175, 0.15);
+        }
+        .cart-animation {
+            animation: cartBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        @keyframes cartBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .notification-slide {
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header with Shopping Cart -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="../../tech-showcase.html" class="flex items-center space-x-2 text-gray-600 hover:text-primary-500 transition-colors">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m12 19-7-7 7-7"/>
+                            <path d="M19 12H5"/>
+                        </svg>
+                        <span class="hidden sm:inline">Back to Showcase</span>
+                    </a>
+                    <div class="bg-primary-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        Next.js E-commerce Demo
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <div class="hidden md:flex items-center space-x-6">
+                        <button onclick="filterProducts('all')" class="text-gray-700 hover:text-primary-500 transition-colors">All Services</button>
+                        <button onclick="filterProducts('strategy')" class="text-gray-700 hover:text-primary-500 transition-colors">Strategy</button>
+                        <button onclick="filterProducts('leadership')" class="text-gray-700 hover:text-primary-500 transition-colors">Leadership</button>
+                        <button onclick="filterProducts('technology')" class="text-gray-700 hover:text-primary-500 transition-colors">Technology</button>
+                    </div>
+                    
+                    <!-- Shopping Cart -->
+                    <button onclick="toggleCart()" class="relative p-2 text-gray-600 hover:text-primary-500 transition-colors">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"/>
+                            <circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">Caroline Williamson</h1>
+            <p class="text-xl md:text-2xl mb-6 text-blue-100">Professional Technology Services Marketplace</p>
+            <p class="text-lg mb-8 max-w-3xl mx-auto text-blue-100">
+                Browse and "purchase" technology leadership services. This demo showcases Next.js e-commerce capabilities 
+                including dynamic routing, shopping cart state management, and product filtering.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="bg-white/20 px-4 py-2 rounded-full">
+                    <span class="font-semibold">📞 0458 024 081</span>
+                </div>
+                <div class="bg-white/20 px-4 py-2 rounded-full">
+                    <span class="font-semibold">✉️ cparuit@gmail.com</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Filters -->
+    <section class="py-8 bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="filterProducts('all')" class="filter-btn bg-primary-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-primary-600 transition-colors">
+                    All Services
+                </button>
+                <button onclick="filterProducts('strategy')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-300 transition-colors">
+                    Strategy
+                </button>
+                <button onclick="filterProducts('leadership')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-300 transition-colors">
+                    Leadership
+                </button>
+                <button onclick="filterProducts('technology')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-300 transition-colors">
+                    Technology
+                </button>
+                <button onclick="filterProducts('transformation')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-semibold hover:bg-gray-300 transition-colors">
+                    Transformation
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products/Services Grid -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">Professional Technology Services</h2>
+            <div id="productsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Products will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cartSidebar" class="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50">
+        <div class="p-6 border-b">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold">Selected Services</h3>
+                <button onclick="toggleCart()" class="p-2 hover:bg-gray-100 rounded-full">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="cartItems" class="p-6 flex-1 overflow-y-auto">
+            <!-- Cart items will be populated by JavaScript -->
+        </div>
+        <div class="p-6 border-t">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-lg font-semibold">Total:</span>
+                <span id="cartTotal" class="text-2xl font-bold text-primary-500">$0</span>
+            </div>
+            <button onclick="checkout()" class="w-full bg-primary-500 text-white py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors">
+                Schedule Consultation
+            </button>
+        </div>
+    </div>
+
+    <!-- Cart overlay -->
+    <div id="cartOverlay" class="fixed inset-0 bg-black/50 z-40 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+    <!-- Notification -->
+    <div id="notification" class="fixed top-20 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300">
+        <div class="flex items-center space-x-2">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,11 12,14 22,4"/>
+                <path d="m21,3-6.5,18a.55.55,0,0,1-1,0l-3.5-7-7-3.5a.55.55,0,0,1,0-1z"/>
+            </svg>
+            <span id="notificationText">Service added to consultation!</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-400 mb-4">
+                Next.js E-commerce Demo - Showcasing Dynamic Routing, State Management & Shopping Cart
+            </p>
+            <div class="flex justify-center space-x-4">
+                <span class="bg-blue-600 px-3 py-1 rounded text-sm">SSR</span>
+                <span class="bg-green-600 px-3 py-1 rounded text-sm">Dynamic Routes</span>
+                <span class="bg-purple-600 px-3 py-1 rounded text-sm">State Management</span>
+                <span class="bg-red-600 px-3 py-1 rounded text-sm">Shopping Cart</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // E-commerce data (demonstrating Next.js data fetching capabilities)
+        const services = [
+            {
+                id: 1,
+                name: "Technology Strategy & Roadmap",
+                category: "strategy",
+                price: 25000,
+                duration: "3 months",
+                description: "Comprehensive technology strategy development with 5-year roadmap, risk assessment, and business alignment.",
+                features: ["Strategic Planning", "Risk Assessment", "Business Alignment", "5-Year Roadmap"],
+                image: "🎯",
+                rating: 5,
+                testimonial: "Delivered exceptional strategic guidance that transformed our technology approach."
+            },
+            {
+                id: 2,
+                name: "Digital Transformation Leadership",
+                category: "transformation",
+                price: 45000,
+                duration: "6 months", 
+                description: "End-to-end digital transformation program with change management and cultural transformation.",
+                features: ["Change Management", "Process Optimization", "Cultural Transformation", "ROI Measurement"],
+                image: "🚀",
+                rating: 5,
+                testimonial: "Led our organization through successful digital transformation with measurable results."
+            },
+            {
+                id: 3,
+                name: "High-Performance Team Building",
+                category: "leadership",
+                price: 18000,
+                duration: "2 months",
+                description: "Team optimization and leadership development for technology organizations up to 250+ employees.",
+                features: ["Team Assessment", "Leadership Coaching", "Performance Metrics", "Engagement Strategy"],
+                image: "👥",
+                rating: 5,
+                testimonial: "Increased our team engagement scores from 67% to 84% in just 6 months."
+            },
+            {
+                id: 4,
+                name: "AI & Data Strategy Implementation", 
+                category: "technology",
+                price: 35000,
+                duration: "4 months",
+                description: "Complete AI strategy with Microsoft Copilot rollout and data platform implementation.",
+                features: ["AI Strategy", "Data Governance", "Platform Implementation", "Use Case Development"],
+                image: "🤖",
+                rating: 5,
+                testimonial: "Championed our AI roadmap resulting in significant process optimization."
+            },
+            {
+                id: 5,
+                name: "Enterprise Architecture Design",
+                category: "technology", 
+                price: 28000,
+                duration: "3 months",
+                description: "Enterprise platform architecture with reusable components and best practices implementation.",
+                features: ["Architecture Design", "Platform Selection", "Best Practices", "Scalability Planning"],
+                image: "🏗️",
+                rating: 5,
+                testimonial: "Simplified our technology landscape while improving performance and reducing costs."
+            },
+            {
+                id: 6,
+                name: "Cybersecurity & Risk Management",
+                category: "technology",
+                price: 22000,
+                duration: "2 months", 
+                description: "Comprehensive security strategy implementation meeting APRA CPS230 compliance standards.",
+                features: ["Security Assessment", "Compliance Strategy", "Risk Mitigation", "Policy Development"],
+                image: "🔒",
+                rating: 5,
+                testimonial: "Implemented robust security solutions protecting 40k employees and 5M customers."
+            },
+            {
+                id: 7,
+                name: "Vendor & Contract Management",
+                category: "strategy",
+                price: 15000,
+                duration: "2 months",
+                description: "Strategic vendor relationship management and contract optimization for technology procurement.",
+                features: ["Vendor Assessment", "Contract Negotiation", "Cost Optimization", "Relationship Management"],
+                image: "🤝",
+                rating: 4,
+                testimonial: "Optimized our vendor relationships resulting in 30-40M annual savings."
+            },
+            {
+                id: 8,
+                name: "Technology Due Diligence",
+                category: "strategy",
+                price: 12000,
+                duration: "1 month",
+                description: "Complete IT due diligence for mergers, acquisitions, and strategic technology investments.",
+                features: ["Technology Assessment", "Risk Analysis", "Integration Planning", "Valuation Support"],
+                image: "🔍",
+                rating: 5,
+                testimonial: "Led comprehensive due diligence process for successful business division sale."
+            }
+        ];
+
+        let cart = [];
+        let currentFilter = 'all';
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts();
+            updateCartDisplay();
+        });
+
+        // Render products (simulating Next.js dynamic rendering)
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            const filteredServices = currentFilter === 'all' 
+                ? services 
+                : services.filter(service => service.category === currentFilter);
+
+            grid.innerHTML = filteredServices.map(service => \`
+                <div class="product-card bg-white rounded-xl shadow-lg overflow-hidden" data-category="\${service.category}">
+                    <!-- Product Image/Icon -->
+                    <div class="bg-gradient-to-br from-primary-500 to-primary-700 p-8 text-center">
+                        <div class="text-6xl mb-4">\${service.image}</div>
+                        <div class="flex justify-center mb-2">
+                            \${Array.from({length: 5}, (_, i) => \`
+                                <svg class="w-5 h-5 \${i < service.rating ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                            \`).join('')}
+                        </div>
+                    </div>
+                    
+                    <!-- Product Details -->
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">\${service.name}</h3>
+                        <p class="text-gray-600 mb-4 text-sm">\${service.description}</p>
+                        
+                        <!-- Features -->
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Includes:</h4>
+                            <ul class="space-y-1">
+                                \${service.features.map(feature => \`
+                                    <li class="text-sm text-gray-600 flex items-center">
+                                        <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        \${feature}
+                                    </li>
+                                \`).join('')}
+                            </ul>
+                        </div>
+
+                        <!-- Testimonial -->
+                        <div class="bg-gray-50 p-3 rounded-lg mb-4">
+                            <p class="text-sm text-gray-600 italic">"\${service.testimonial}"</p>
+                        </div>
+                        
+                        <!-- Pricing and Duration -->
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-gray-800">$\${service.price.toLocaleString()}</span>
+                                <span class="text-gray-500 ml-1">AUD</span>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm text-gray-500">Duration</div>
+                                <div class="font-semibold text-gray-700">\${service.duration}</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Add to Cart Button -->
+                        <button onclick="addToCart(\${service.id})" 
+                                class="w-full bg-primary-500 text-white py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors flex items-center justify-center space-x-2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"/>
+                                <circle cx="20" cy="21" r="1"/>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                            </svg>
+                            <span>Add to Consultation</span>
+                        </button>
+                        
+                        <!-- Quick View -->
+                        <button onclick="quickView(\${service.id})" 
+                                class="w-full mt-2 border-2 border-primary-500 text-primary-500 py-2 rounded-lg font-semibold hover:bg-primary-50 transition-colors">
+                            Quick View Details
+                        </button>
+                    </div>
+                </div>
+            \`).join('');
+        }
+
+        // Filter products (demonstrating Next.js client-side filtering)
+        function filterProducts(category) {
+            currentFilter = category;
+            
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-primary-500', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            event.target.classList.remove('bg-gray-200', 'text-gray-700');
+            event.target.classList.add('bg-primary-500', 'text-white');
+            
+            // Re-render products with animation
+            const grid = document.getElementById('productsGrid');
+            grid.style.opacity = '0.5';
+            setTimeout(() => {
+                renderProducts();
+                grid.style.opacity = '1';
+            }, 200);
+        }
+
+        // Add to cart (demonstrating Next.js state management)
+        function addToCart(serviceId) {
+            const service = services.find(s => s.id === serviceId);
+            const existingItem = cart.find(item => item.id === serviceId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({...service, quantity: 1});
+            }
+            
+            updateCartDisplay();
+            showNotification(\`\${service.name} added to consultation!\`);
+            
+            // Animate cart icon
+            const cartIcon = document.querySelector('button[onclick="toggleCart()"]');
+            cartIcon.classList.add('cart-animation');
+            setTimeout(() => cartIcon.classList.remove('cart-animation'), 600);
+        }
+
+        // Update cart display
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cartCount');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            cartCount.textContent = totalItems;
+            cartTotal.textContent = \`$\${totalPrice.toLocaleString()}\`;
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p class="text-gray-500 text-center">No services selected</p>';
+            } else {
+                cartItems.innerHTML = cart.map(item => \`
+                    <div class="flex items-center justify-between p-3 border-b border-gray-100">
+                        <div class="flex items-center space-x-3">
+                            <div class="text-2xl">\${item.image}</div>
+                            <div>
+                                <div class="font-semibold text-gray-800">\${item.name}</div>
+                                <div class="text-sm text-gray-500">$\${item.price.toLocaleString()} AUD</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="updateQuantity(\${item.id}, -1)" class="p-1 hover:bg-gray-100 rounded">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                            </button>
+                            <span class="w-8 text-center">\${item.quantity}</span>
+                            <button onclick="updateQuantity(\${item.id}, 1)" class="p-1 hover:bg-gray-100 rounded">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                \`).join('');
+            }
+        }
+
+        // Update quantity
+        function updateQuantity(serviceId, change) {
+            const item = cart.find(item => item.id === serviceId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(cartItem => cartItem.id !== serviceId);
+                }
+                updateCartDisplay();
+            }
+        }
+
+        // Toggle cart sidebar
+        function toggleCart() {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            
+            if (sidebar.classList.contains('translate-x-full')) {
+                // Open cart
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = 'hidden';
+            } else {
+                // Close cart
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.classList.remove('translate-x-full');
+            notification.classList.add('notification-slide');
+            
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                notification.classList.remove('notification-slide');
+            }, 3000);
+        }
+
+        // Quick view modal (demonstrating Next.js modal functionality)
+        function quickView(serviceId) {
+            const service = services.find(s => s.id === serviceId);
+            alert(\`Quick View: \${service.name}\\n\\n\${service.description}\\n\\nPrice: $\${service.price.toLocaleString()} AUD\\nDuration: \${service.duration}\\n\\nThis demonstrates Next.js modal/overlay capabilities!\`);
+        }
+
+        // Checkout (demonstrating Next.js form handling)
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Please add services to your consultation first!');
+                return;
+            }
+            
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const serviceNames = cart.map(item => item.name).join(', ');
+            
+            alert(\`Consultation Scheduled!\\n\\nServices: \${serviceNames}\\nTotal Investment: $\${totalPrice.toLocaleString()} AUD\\n\\nThis demonstrates Next.js form handling and API integration capabilities!\\n\\nCaroline will contact you at: cparuit@gmail.com\`);
+            
+            // Clear cart
+            cart = [];
+            updateCartDisplay();
+            toggleCart();
+        }
+
+        // Close cart when clicking overlay
+        document.getElementById('cartOverlay').addEventListener('click', toggleCart);
+
+        // Keyboard navigation (demonstrating Next.js accessibility)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const sidebar = document.getElementById('cartSidebar');
+                if (!sidebar.classList.contains('translate-x-full')) {
+                    toggleCart();
+                }
+            }
+        });
+
+        // Simulate Next.js route changes
+        console.log('🟢 Next.js E-commerce Demo loaded!');
+        console.log('🛒 Showcasing: Dynamic routing, state management, shopping cart, and more!');
+    </script>
+</body>
+</html>
