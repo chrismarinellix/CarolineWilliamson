@@ -513,16 +513,16 @@
         // Toggle trail
         function toggleTrail() {
             showTrail = !showTrail;
-            const btn = document.getElementById('trailBtn');
+            const btn = document.getElementById('trailToggle');
             const status = document.getElementById('trailStatus');
             
             if (showTrail) {
-                btn.textContent = '✨ Trail: ON';
-                btn.className = btn.className.replace('bg-red-500', 'bg-green-500').replace('hover:bg-red-600', 'hover:bg-green-600');
+                btn.textContent = '🌟 Disable Trail';
+                btn.className = 'magnetic-button px-6 py-3 rounded-lg font-semibold w-full transition-colors bg-red-500 hover:bg-red-600 text-white';
                 status.textContent = 'Trail is active - move your mouse!';
             } else {
-                btn.textContent = '✨ Trail: OFF';
-                btn.className = btn.className.replace('bg-green-500', 'bg-red-500').replace('hover:bg-green-600', 'hover:bg-red-600');
+                btn.textContent = '🌟 Enable Trail';
+                btn.className = 'magnetic-button px-6 py-3 rounded-lg font-semibold w-full transition-colors bg-green-500 hover:bg-green-600 text-white';
                 status.textContent = 'Trail disabled';
             }
         }
