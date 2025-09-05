@@ -10,7 +10,8 @@
       "Bash(start tech-showcase.html)",
       "Bash(npm install)",
       "Bash(npm run dev:*)",
-      "Bash(start implementations/1-nextjs-tailwind/standalone.html)"
+      "Bash(start implementations/1-nextjs-tailwind/standalone.html)",
+      "Bash(start implementations/2-react-framer/index.html)"
     ],
     "deny": [],
     "ask": []
