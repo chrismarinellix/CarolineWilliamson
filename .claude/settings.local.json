@@ -11,7 +11,11 @@
       "Bash(npm install)",
       "Bash(npm run dev:*)",
       "Bash(start implementations/1-nextjs-tailwind/standalone.html)",
-      "Bash(start implementations/2-react-framer/index.html)"
+      "Bash(start implementations/2-react-framer/index.html)",
+      "Bash(start implementations/3-vue-tailwind/index.html)",
+      "Bash(start implementations/4-svelte-sveltekit/index.html)",
+      "Bash(start implementations/5-react-chakra/index.html)",
+      "Bash(start implementations/6-astro-tailwind/index.html)"
     ],
     "deny": [],
     "ask": []
