@@ -4,21 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caroline Williamson - Executive Technology Leader (Astro + Tailwind)</title>
-    <meta name="description" content="Executive Technology Leader with 20+ years of success in digital transformation, AI strategy, and enterprise technology leadership">
-    <meta name="keywords" content="Technology Executive, Digital Transformation, AI Strategy, Enterprise Architecture, Technology Leadership">
-    <meta name="author" content="Caroline Williamson">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="profile">
-    <meta property="og:title" content="Caroline Williamson - Executive Technology Leader">
-    <meta property="og:description" content="20+ years experience in technology strategy, digital transformation, and AI implementation">
-    <meta property="og:url" content="https://carolinewilliamson.tech">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="Caroline Williamson - Technology Executive">
-    <meta property="twitter:description" content="Leading digital transformation and AI strategy for enterprise organizations">
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -39,51 +24,6 @@
                     },
                     fontFamily: {
                         sans: ['Segoe UI', 'system-ui', '-apple-system', 'sans-serif'],
-                    },
-                    animation: {
-                        'fade-in-up': 'fadeInUp 0.6s ease-out',
-                        'fade-in-down': 'fadeInDown 0.6s ease-out',
-                        'slide-in-right': 'slideInRight 0.8s ease-out',
-                        'scale-in': 'scaleIn 0.5s ease-out',
-                        'bounce-subtle': 'bounceSubtle 2s ease-in-out infinite',
-                        'glow-pulse': 'glowPulse 3s ease-in-out infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                        'gradient-x': 'gradient-x 15s ease infinite',
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(30px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
-                        },
-                        fadeInDown: {
-                            '0%': { opacity: '0', transform: 'translateY(-30px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
-                        },
-                        slideInRight: {
-                            '0%': { opacity: '0', transform: 'translateX(50px)' },
-                            '100%': { opacity: '1', transform: 'translateX(0)' }
-                        },
-                        scaleIn: {
-                            '0%': { opacity: '0', transform: 'scale(0.9)' },
-                            '100%': { opacity: '1', transform: 'scale(1)' }
-                        },
-                        bounceSubtle: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' }
-                        },
-                        glowPulse: {
-                            '0%, 100%': { boxShadow: '0 0 20px rgba(30, 64, 175, 0.5)' },
-                            '50%': { boxShadow: '0 0 40px rgba(30, 64, 175, 0.8), 0 0 60px rgba(30, 64, 175, 0.6)' }
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-                            '25%': { transform: 'translateY(-10px) rotate(1deg)' },
-                            '75%': { transform: 'translateY(-5px) rotate(-1deg)' }
-                        },
-                        'gradient-x': {
-                            '0%, 100%': { backgroundPosition: '0% 50%' },
-                            '50%': { backgroundPosition: '100% 50%' }
-                        }
                     }
                 }
             }
@@ -93,32 +33,59 @@
         .astro-gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #1e40af 100%);
             background-size: 400% 400%;
-            animation: gradient-x 15s ease infinite;
+            animation: gradient-shift 15s ease infinite;
             min-height: 100vh;
         }
 
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .astro-glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .astro-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .astro-card:hover {
-            transform: translateY(-12px) scale(1.03);
-            box-shadow: 0 30px 60px rgba(30, 64, 175, 0.3);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(30, 64, 175, 0.2);
         }
 
-        .astro-text-glow {
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+        .astro-fade-in {
+            animation: fade-in 1s ease-out;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .astro-slide-in {
+            animation: slide-in 0.8s ease-out;
+        }
+
+        @keyframes slide-in {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .astro-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .astro-bounce {
+            animation: bounce 2s infinite;
         }
 
         .astro-shimmer {
-            background: linear-gradient(90deg, #1e40af 0%, #ffffff 50%, #1e40af 100%);
+            background: linear-gradient(90deg, #1e40af, #ffffff, #1e40af);
             background-size: 200% 100%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -131,226 +98,109 @@
             100% { background-position: 200% 0; }
         }
 
-        .astro-achievement::before {
+        .achievement-bullet {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .achievement-bullet::before {
             content: '▶';
             position: absolute;
             left: 0;
             top: 0;
             color: #1e40af;
             font-weight: bold;
-            font-size: 1.1em;
         }
 
-        .astro-achievement {
-            position: relative;
-            padding-left: 1.5rem;
-            margin-bottom: 0.75rem;
+        .achievement-bullet:hover {
+            color: #1e40af;
+            transform: translateX(8px);
             transition: all 0.3s ease;
         }
 
-        .astro-achievement:hover {
-            color: #1e40af;
-            transform: translateX(8px);
-        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
 
-        /* Progressive Enhancement - Intersection Observer Animations */
-        .astro-observe {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .astro-observe.astro-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Advanced hover effects */
-        .astro-magnetic {
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
-        }
-
-        .astro-magnetic:hover {
-            transform: translateZ(0) scale(1.05);
-            box-shadow: 0 25px 50px rgba(30, 64, 175, 0.25);
-        }
-
-        /* Performance optimizations */
-        .astro-card,
-        .astro-magnetic {
-            will-change: transform, box-shadow;
-        }
-
-        /* Print optimizations */
         @media print {
             .no-print { display: none !important; }
-            .astro-glass { background: white !important; backdrop-filter: none !important; }
             .astro-gradient-bg { background: white !important; }
             .text-white { color: black !important; }
-            .astro-card { box-shadow: none !important; border: 1px solid #ccc !important; }
-        }
-
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            .astro-glass {
-                background: rgba(255, 255, 255, 0.9);
-                border: 2px solid rgba(0, 0, 0, 0.8);
-            }
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            .astro-glass {
-                background: rgba(0, 0, 0, 0.3);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
         }
     </style>
-
-    <!-- Performance optimizations -->
-    <link rel="preload" as="style" href="https://cdn.tailwindcss.com">
-    <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
-    
-    <!-- SEO and Social -->
-    <link rel="canonical" href="https://carolinewilliamson.tech">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Structured Data for SEO -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Caroline Williamson",
-        "jobTitle": "Executive Technology Leader",
-        "description": "Executive Technology Leader with 20+ years of success developing and executing technology strategies, implementing digital transformation initiatives, and driving operations to optimise business outcomes.",
-        "telephone": "+61458024081",
-        "email": "cparuit@gmail.com",
-        "url": "https://www.linkedin.com/in/caroline-williamson-technology",
-        "sameAs": [
-            "https://www.linkedin.com/in/caroline-williamson-technology"
-        ],
-        "knowsAbout": [
-            "Technology Strategy",
-            "Digital Transformation", 
-            "AI Strategy",
-            "Enterprise Architecture",
-            "Data Strategy",
-            "Cyber Security"
-        ]
-    }
-    </script>
 </head>
 <body class="astro-gradient-bg font-sans">
     <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 astro-glass z-50 border-b border-white/20 no-print" role="navigation" aria-label="Main navigation">
+    <nav class="fixed top-0 left-0 right-0 astro-glass z-50 border-b border-white/20 no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-4">
                     <a href="../../tech-showcase.html" 
-                       class="flex items-center space-x-2 text-white hover:text-blue-200 transition-colors astro-magnetic p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                       aria-label="Back to Technology Showcase">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                       class="flex items-center space-x-2 text-white hover:text-blue-200 transition-colors astro-card p-2 rounded-lg">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="m12 19-7-7 7-7"/>
                             <path d="M19 12H5"/>
                         </svg>
                         <span class="hidden sm:inline">Back to Tech Showcase</span>
                     </a>
-                    <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-sm font-semibold animate-glow-pulse">
+                    <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-sm font-semibold astro-pulse">
                         Astro + Tailwind
                     </div>
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-8 text-white">
                     <button onclick="scrollToSection('summary')" 
-                            class="hover:text-blue-200 transition-colors astro-magnetic px-3 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            class="hover:text-blue-200 transition-colors astro-card px-3 py-1 rounded-lg">
                         About
                     </button>
                     <button onclick="scrollToSection('experience')" 
-                            class="hover:text-blue-200 transition-colors astro-magnetic px-3 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            class="hover:text-blue-200 transition-colors astro-card px-3 py-1 rounded-lg">
                         Experience
                     </button>
                     <button onclick="scrollToSection('performance')" 
-                            class="hover:text-blue-200 transition-colors astro-magnetic px-3 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            class="hover:text-blue-200 transition-colors astro-card px-3 py-1 rounded-lg">
                         Performance
                     </button>
-                    <button onclick="handleDownload()" 
-                            class="bg-gradient-to-r from-primary-500 to-primary-600 text-white px-4 py-2 rounded-lg font-semibold astro-magnetic animate-glow-pulse focus:outline-none focus:ring-2 focus:ring-primary-300">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2" aria-hidden="true">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="7,10 12,15 17,10"/>
-                            <line x1="12" y1="15" x2="12" y2="3"/>
-                        </svg>
-                        Download CV
-                    </button>
                 </div>
-
-                <!-- Mobile menu button -->
-                <button class="md:hidden text-white p-2" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <line x1="3" y1="12" x2="21" y2="12"/>
-                        <line x1="3" y1="18" x2="21" y2="18"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile menu -->
-        <div id="mobileMenu" class="md:hidden hidden bg-black/50 backdrop-blur-md border-t border-white/20">
-            <div class="px-4 py-2 space-y-2">
-                <button onclick="scrollToSection('summary')" class="block w-full text-left py-2 text-white hover:text-blue-200">About</button>
-                <button onclick="scrollToSection('experience')" class="block w-full text-left py-2 text-white hover:text-blue-200">Experience</button>
-                <button onclick="scrollToSection('performance')" class="block w-full text-left py-2 text-white hover:text-blue-200">Performance</button>
             </div>
         </div>
     </nav>
 
     <div class="pt-16">
         <!-- Hero Section -->
-        <section class="py-20 px-4 sm:px-6 lg:px-8" role="banner">
+        <section class="py-20 px-4 sm:px-6 lg:px-8">
             <div class="max-w-7xl mx-auto">
                 <div class="text-center">
-                    <h1 class="text-5xl md:text-7xl font-light text-white mb-4 astro-text-glow animate-fade-in-down">
-                        <span class="astro-shimmer">Caroline Williamson</span>
+                    <h1 class="text-5xl md:text-7xl font-light text-white mb-4 astro-shimmer astro-fade-in">
+                        Caroline Williamson
                     </h1>
                     
-                    <p class="text-2xl md:text-3xl text-white font-semibold mb-8 animate-fade-in-up animation-delay-200">
+                    <p class="text-2xl md:text-3xl text-white font-semibold mb-8 astro-fade-in delay-100">
                         Executive Technology Leader
                     </p>
                     
-                    <div class="flex flex-wrap justify-center gap-4 mb-12 animate-fade-in-up animation-delay-400">
+                    <div class="flex flex-wrap justify-center gap-4 mb-12 astro-fade-in delay-200">
                         <a href="tel:0458024081" 
-                           class="flex items-center space-x-2 astro-glass px-6 py-3 rounded-full shadow-lg text-white astro-card animate-float"
-                           aria-label="Call Caroline Williamson">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-300" aria-hidden="true">
+                           class="flex items-center space-x-2 astro-glass px-6 py-3 rounded-full shadow-lg text-white astro-card">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-300">
                                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                             </svg>
                             <span class="font-medium">0458 024 081</span>
                         </a>
                         <a href="mailto:cparuit@gmail.com"
-                           class="flex items-center space-x-2 astro-glass px-6 py-3 rounded-full shadow-lg text-white astro-card animate-float animation-delay-200"
-                           aria-label="Email Caroline Williamson">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-300" aria-hidden="true">
+                           class="flex items-center space-x-2 astro-glass px-6 py-3 rounded-full shadow-lg text-white astro-card">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-300">
                                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                                 <polyline points="22,6 12,13 2,6"/>
                             </svg>
                             <span class="font-medium">cparuit@gmail.com</span>
                         </a>
-                        <a href="https://www.linkedin.com/in/caroline-williamson-technology" 
-                           target="_blank" 
-                           rel="noopener noreferrer"
-                           class="flex items-center space-x-2 astro-glass px-6 py-3 rounded-full shadow-lg text-white astro-card animate-float animation-delay-400"
-                           aria-label="View Caroline Williamson's LinkedIn profile">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-300" aria-hidden="true">
+                        <a href="https://www.linkedin.com/in/caroline-williamson-technology" target="_blank"
+                           class="flex items-center space-x-2 astro-glass px-6 py-3 rounded-full shadow-lg text-white astro-card">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-300">
                                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
                                 <rect x="2" y="9" width="4" height="12"/>
                                 <circle cx="4" cy="4" r="2"/>
@@ -363,9 +213,9 @@
         </section>
 
         <!-- Executive Summary -->
-        <section id="summary" class="py-16 px-4 sm:px-6 lg:px-8" aria-label="Executive Summary">
+        <section id="summary" class="py-16 px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl mx-auto">
-                <div class="astro-glass rounded-xl shadow-2xl p-8 border border-white/20 astro-card astro-observe">
+                <div class="astro-glass rounded-xl shadow-2xl p-8 astro-card astro-fade-in delay-300">
                     <div class="bg-gradient-to-r from-gray-850 to-gray-750 text-white p-8 rounded-xl">
                         <h2 class="text-2xl font-bold mb-6 astro-shimmer">Executive Summary</h2>
                         <p class="text-lg leading-relaxed text-gray-100">
@@ -376,48 +226,54 @@
             </div>
         </section>
 
-        <!-- Performance Metrics Section -->
-        <section id="performance" class="py-16 px-4 sm:px-6 lg:px-8" aria-label="Performance Metrics">
+        <!-- Astro Performance Features -->
+        <section id="performance" class="py-16 px-4 sm:px-6 lg:px-8">
             <div class="max-w-6xl mx-auto">
-                <h2 class="text-4xl font-bold text-white mb-8 text-center astro-shimmer astro-observe">
+                <h2 class="text-4xl font-bold text-white mb-8 text-center astro-shimmer astro-fade-in delay-100">
                     🚀 Astro Performance Benefits
                 </h2>
                 <div class="grid md:grid-cols-3 gap-8 mb-12">
-                    <div class="astro-glass rounded-xl p-6 astro-card astro-observe text-center">
-                        <div class="text-4xl mb-4 animate-bounce-subtle">⚡</div>
-                        <h3 class="text-2xl font-bold text-white mb-2">Zero JS by Default</h3>
-                        <p class="text-gray-200">Ships minimal JavaScript, resulting in blazing fast load times</p>
+                    <div class="astro-glass rounded-xl p-6 astro-card astro-slide-in delay-200">
+                        <div class="text-center mb-4">
+                            <span class="text-4xl astro-bounce">⚡</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 text-center">Zero JS by Default</h3>
+                        <p class="text-gray-200 text-center">Ships minimal JavaScript, resulting in blazing fast load times</p>
                     </div>
-                    <div class="astro-glass rounded-xl p-6 astro-card astro-observe text-center">
-                        <div class="text-4xl mb-4 animate-bounce-subtle animation-delay-200">📊</div>
-                        <h3 class="text-2xl font-bold text-white mb-2">SEO Optimized</h3>
-                        <p class="text-gray-200">Server-side rendered HTML with structured data for perfect SEO</p>
+                    <div class="astro-glass rounded-xl p-6 astro-card astro-slide-in delay-300">
+                        <div class="text-center mb-4">
+                            <span class="text-4xl astro-pulse">📊</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 text-center">SEO Optimized</h3>
+                        <p class="text-gray-200 text-center">Server-side rendered HTML with structured data for perfect SEO</p>
                     </div>
-                    <div class="astro-glass rounded-xl p-6 astro-card astro-observe text-center">
-                        <div class="text-4xl mb-4 animate-bounce-subtle animation-delay-400">🎯</div>
-                        <h3 class="text-2xl font-bold text-white mb-2">Island Architecture</h3>
-                        <p class="text-gray-200">Hydrate only interactive components when needed</p>
+                    <div class="astro-glass rounded-xl p-6 astro-card astro-slide-in delay-400">
+                        <div class="text-center mb-4">
+                            <span class="text-4xl animate-spin" style="animation-duration: 3s;">🎯</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 text-center">Island Architecture</h3>
+                        <p class="text-gray-200 text-center">Hydrate only interactive components when needed</p>
                     </div>
                 </div>
 
                 <!-- Performance Stats -->
-                <div class="astro-glass rounded-xl p-8 astro-observe">
+                <div class="astro-glass rounded-xl p-8 astro-fade-in delay-500">
                     <h3 class="text-2xl font-bold text-white mb-6 text-center">Performance Comparison</h3>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-green-400 mb-2">< 1s</div>
+                            <div class="text-3xl font-bold text-green-400 mb-2 astro-pulse">< 1s</div>
                             <div class="text-gray-200 text-sm">Load Time</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-green-400 mb-2">100</div>
+                            <div class="text-3xl font-bold text-green-400 mb-2 astro-pulse delay-100">100</div>
                             <div class="text-gray-200 text-sm">Lighthouse Score</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-green-400 mb-2">~15KB</div>
+                            <div class="text-3xl font-bold text-green-400 mb-2 astro-pulse delay-200">~15KB</div>
                             <div class="text-gray-200 text-sm">Bundle Size</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-3xl font-bold text-green-400 mb-2">0ms</div>
+                            <div class="text-3xl font-bold text-green-400 mb-2 astro-pulse delay-300">0ms</div>
                             <div class="text-gray-200 text-sm">TTI</div>
                         </div>
                     </div>
@@ -426,46 +282,46 @@
         </section>
 
         <!-- Key Deliverables -->
-        <section class="py-16 px-4 sm:px-6 lg:px-8" aria-label="Key Deliverables">
+        <section class="py-16 px-4 sm:px-6 lg:px-8">
             <div class="max-w-6xl mx-auto">
-                <h2 class="text-4xl font-bold text-white mb-8 text-center astro-shimmer astro-observe">
+                <h2 class="text-4xl font-bold text-white mb-8 text-center astro-shimmer astro-fade-in">
                     Key Deliverables
                 </h2>
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="astro-glass rounded-xl p-6 astro-card astro-observe">
+                    <div class="astro-glass rounded-xl p-6 astro-card astro-slide-in delay-100">
                         <div class="text-center mb-4">
-                            <span class="text-4xl animate-bounce-subtle">🎯</span>
+                            <span class="text-4xl astro-bounce">🎯</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-4 text-center">Strategy & Leadership</h3>
                         <ul class="space-y-3">
-                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-magnetic hover:bg-white/20 transition-all">Technology Strategy & Roadmap</li>
-                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-magnetic hover:bg-white/20 transition-all">Delivery Executive & Sponsor</li>
-                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-magnetic hover:bg-white/20 transition-all">Digital Transformation</li>
-                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-magnetic hover:bg-white/20 transition-all">Technology Simplification</li>
+                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-card hover:bg-white/20 transition-all">Technology Strategy & Roadmap</li>
+                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-card hover:bg-white/20 transition-all">Delivery Executive & Sponsor</li>
+                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-card hover:bg-white/20 transition-all">Digital Transformation</li>
+                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-card hover:bg-white/20 transition-all">Technology Simplification</li>
                         </ul>
                     </div>
-                    <div class="astro-glass rounded-xl p-6 astro-card astro-observe">
+                    <div class="astro-glass rounded-xl p-6 astro-card astro-slide-in delay-200">
                         <div class="text-center mb-4">
-                            <span class="text-4xl animate-bounce-subtle animation-delay-200">👥</span>
+                            <span class="text-4xl astro-bounce delay-200">👥</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-4 text-center">People & Operations</h3>
                         <ul class="space-y-3">
-                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-magnetic hover:bg-white/20 transition-all">Leads High Performing Teams</li>
-                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-magnetic hover:bg-white/20 transition-all">Business Relationship Management</li>
-                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-magnetic hover:bg-white/20 transition-all">Vendor & Contract Management</li>
-                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-magnetic hover:bg-white/20 transition-all">Global Multifunctional Teams</li>
+                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-card hover:bg-white/20 transition-all">Leads High Performing Teams</li>
+                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-card hover:bg-white/20 transition-all">Business Relationship Management</li>
+                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-card hover:bg-white/20 transition-all">Vendor & Contract Management</li>
+                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-card hover:bg-white/20 transition-all">Global Multifunctional Teams</li>
                         </ul>
                     </div>
-                    <div class="astro-glass rounded-xl p-6 astro-card astro-observe">
+                    <div class="astro-glass rounded-xl p-6 astro-card astro-slide-in delay-300">
                         <div class="text-center mb-4">
-                            <span class="text-4xl animate-bounce-subtle animation-delay-400">🚀</span>
+                            <span class="text-4xl astro-bounce delay-400">🚀</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-4 text-center">Technology & Innovation</h3>
                         <ul class="space-y-3">
-                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-magnetic hover:bg-white/20 transition-all">Data & AI Strategy</li>
-                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-magnetic hover:bg-white/20 transition-all">Enterprise Platforms</li>
-                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-magnetic hover:bg-white/20 transition-all">Cyber & Information Security</li>
-                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-magnetic hover:bg-white/20 transition-all">Enterprise Architecture</li>
+                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-card hover:bg-white/20 transition-all">Data & AI Strategy</li>
+                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-card hover:bg-white/20 transition-all">Enterprise Platforms</li>
+                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-card hover:bg-white/20 transition-all">Cyber & Information Security</li>
+                            <li class="text-gray-200 text-center py-2 px-4 bg-white/10 rounded-lg astro-card hover:bg-white/20 transition-all">Enterprise Architecture</li>
                         </ul>
                     </div>
                 </div>
@@ -473,21 +329,21 @@
         </section>
 
         <!-- Professional Experience -->
-        <section id="experience" class="py-16 px-4 sm:px-6 lg:px-8" aria-label="Professional Experience">
+        <section id="experience" class="py-16 px-4 sm:px-6 lg:px-8">
             <div class="max-w-6xl mx-auto">
-                <h2 class="text-4xl font-bold text-white mb-8 text-center astro-shimmer astro-observe">
+                <h2 class="text-4xl font-bold text-white mb-8 text-center astro-shimmer astro-fade-in">
                     Professional Experience
                 </h2>
                 <div class="space-y-8">
                     <!-- Jemena -->
-                    <article class="astro-glass rounded-xl p-8 astro-card astro-observe">
+                    <div class="astro-glass rounded-xl p-8 astro-card astro-slide-in delay-100">
                         <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6">
                             <div class="flex-1">
-                                <h3 class="text-2xl font-bold text-blue-300 mb-2">Jemena</h3>
+                                <h3 class="text-2xl font-bold text-blue-300 mb-2 astro-pulse">Jemena</h3>
                                 <h4 class="text-xl font-semibold text-white mb-2">General Manager Corporate Technology, Data, Analytics and AI</h4>
                             </div>
                             <div class="lg:text-right">
-                                <span class="inline-block bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold animate-glow-pulse">
+                                <span class="inline-block bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold astro-pulse">
                                     June 2024 – Current
                                 </span>
                             </div>
@@ -500,37 +356,37 @@
                         <div>
                             <h5 class="text-lg font-semibold text-white mb-4">Key Achievements</h5>
                             <div class="space-y-3">
-                                <div class="astro-achievement text-gray-200">
+                                <div class="achievement-bullet text-gray-200">
                                     Developed the Group's first Technology Strategy and 5-Year Roadmap for Corporate functions setting clear vision for the future.
                                 </div>
-                                <div class="astro-achievement text-gray-200">
+                                <div class="achievement-bullet text-gray-200">
                                     Led Data Strategy, Data Governance Policies and Enterprise Data Platform implementation.
                                 </div>
-                                <div class="astro-achievement text-gray-200">
+                                <div class="achievement-bullet text-gray-200">
                                     Championed AI Roadmap, leading the rollout of Microsoft Copilot and other AI Use Cases to optimise business processes, workflows and customer experience.
                                 </div>
-                                <div class="astro-achievement text-gray-200">
+                                <div class="achievement-bullet text-gray-200">
                                     Launched AI Week with 12 technology strategic partners including Microsoft, AWS, ServiceNow, to educate our teams and showcase the possibilities of AI.
                                 </div>
-                                <div class="astro-achievement text-gray-200">
+                                <div class="achievement-bullet text-gray-200">
                                     Leading the SAP Strategy and Planning for the upcoming S4Hana Upgrade.
                                 </div>
-                                <div class="astro-achievement text-gray-200">
+                                <div class="achievement-bullet text-gray-200">
                                     Restructured the team and brought in new talent to deliver on our strategies and plans, fostering a culture of innovation and excellence.
                                 </div>
                             </div>
                         </div>
-                    </article>
+                    </div>
 
                     <!-- Nutun -->
-                    <article class="astro-glass rounded-xl p-8 astro-card astro-observe">
+                    <div class="astro-glass rounded-xl p-8 astro-card astro-slide-in delay-300">
                         <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6">
                             <div class="flex-1">
-                                <h3 class="text-2xl font-bold text-purple-300 mb-2">Nutun</h3>
+                                <h3 class="text-2xl font-bold text-purple-300 mb-2 astro-pulse delay-100">Nutun</h3>
                                 <h4 class="text-xl font-semibold text-white mb-2">Chief Technology Officer</h4>
                             </div>
                             <div class="lg:text-right">
-                                <span class="inline-block bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold animate-glow-pulse">
+                                <span class="inline-block bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold astro-pulse delay-200">
                                     June 2023 – May 2024
                                 </span>
                             </div>
@@ -543,38 +399,38 @@
                         <div>
                             <h5 class="text-lg font-semibold text-white mb-4">Key Achievements</h5>
                             <div class="space-y-3">
-                                <div class="astro-achievement text-gray-200">
+                                <div class="achievement-bullet text-gray-200">
                                     Reporting to the CEO, led the IT due diligence process for the sale of the Australian division.
                                 </div>
-                                <div class="astro-achievement text-gray-200">
+                                <div class="achievement-bullet text-gray-200">
                                     Conducted a strategic review of the technology landscape; evaluated current state, provided a recommendation on future state technology investments and strategic implementation roadmap to increase revenue, optimise operations and enhance customer journeys. Presented the report to a Board Member.
                                 </div>
-                                <div class="astro-achievement text-gray-200">
+                                <div class="achievement-bullet text-gray-200">
                                     Led the technical integration of Milton and Graham (new acquisition) with Recoveries Corp.
                                 </div>
                             </div>
                         </div>
-                    </article>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Qualifications -->
-        <section class="py-16 px-4 sm:px-6 lg:px-8" aria-label="Qualifications">
+        <section class="py-16 px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl mx-auto">
-                <h2 class="text-4xl font-bold text-white mb-8 text-center astro-shimmer astro-observe">Qualifications</h2>
+                <h2 class="text-4xl font-bold text-white mb-8 text-center astro-shimmer astro-fade-in">Qualifications</h2>
                 <div class="grid md:grid-cols-2 gap-6 mb-8">
-                    <div class="astro-glass rounded-xl p-6 astro-card astro-observe">
+                    <div class="astro-glass rounded-xl p-6 astro-card astro-slide-in delay-100">
                         <div class="text-center mb-3">
-                            <span class="text-3xl">🎓</span>
+                            <span class="text-3xl animate-spin" style="animation-duration: 3s;">🎓</span>
                         </div>
                         <h3 class="text-lg font-bold text-white mb-2 text-center">Bachelor of Arts</h3>
                         <p class="text-blue-300 font-semibold mb-1 text-center">Chinese and International Business</p>
                         <p class="text-gray-200 text-center">Deakin University</p>
                     </div>
-                    <div class="astro-glass rounded-xl p-6 astro-card astro-observe">
+                    <div class="astro-glass rounded-xl p-6 astro-card astro-slide-in delay-200">
                         <div class="text-center mb-3">
-                            <span class="text-3xl">📊</span>
+                            <span class="text-3xl animate-spin" style="animation-duration: 3s; animation-delay: 1s;">📊</span>
                         </div>
                         <h3 class="text-lg font-bold text-white mb-2 text-center">Bachelor of Commerce</h3>
                         <p class="text-blue-300 font-semibold mb-1 text-center">Economics and Marketing</p>
@@ -582,7 +438,7 @@
                     </div>
                 </div>
                 
-                <div class="astro-glass rounded-xl p-6 text-center astro-card astro-observe">
+                <div class="astro-glass rounded-xl p-6 text-center astro-card astro-slide-in delay-300">
                     <div class="text-3xl mb-2">🗣️</div>
                     <h3 class="text-lg font-bold text-white mb-2">Languages</h3>
                     <p class="text-gray-200">Fluent in French</p>
@@ -591,33 +447,29 @@
         </section>
 
         <!-- Footer -->
-        <footer class="py-12 px-4 sm:px-6 lg:px-8 astro-glass no-print" role="contentinfo">
+        <footer class="py-12 px-4 sm:px-6 lg:px-8 astro-glass no-print">
             <div class="max-w-4xl mx-auto text-center">
                 <p class="text-gray-300 mb-4 astro-shimmer">
                     Built with Astro + Tailwind - Ultra-Fast & SEO Perfect! 🌟
                 </p>
                 <div class="flex justify-center space-x-6">
                     <a href="tel:0458024081" 
-                       class="text-gray-400 hover:text-white transition-colors astro-magnetic p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                       aria-label="Call Caroline Williamson">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                       class="text-gray-400 hover:text-white transition-colors astro-card p-2 rounded-lg">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                         </svg>
                     </a>
                     <a href="mailto:cparuit@gmail.com" 
-                       class="text-gray-400 hover:text-white transition-colors astro-magnetic p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                       aria-label="Email Caroline Williamson">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                       class="text-gray-400 hover:text-white transition-colors astro-card p-2 rounded-lg">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                             <polyline points="22,6 12,13 2,6"/>
                         </svg>
                     </a>
                     <a href="https://www.linkedin.com/in/caroline-williamson-technology" 
                        target="_blank" 
-                       rel="noopener noreferrer"
-                       class="text-gray-400 hover:text-white transition-colors astro-magnetic p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                       aria-label="View Caroline Williamson's LinkedIn profile">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                       class="text-gray-400 hover:text-white transition-colors astro-card p-2 rounded-lg">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
                             <rect x="2" y="9" width="4" height="12"/>
                             <circle cx="4" cy="4" r="2"/>
@@ -628,130 +480,17 @@
         </footer>
     </div>
 
-    <!-- Progressive Enhancement JavaScript -->
     <script>
-        // Intersection Observer for animations
-        const observeElements = () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('astro-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-
-            document.querySelectorAll('.astro-observe').forEach(el => {
-                observer.observe(el);
-            });
-        };
-
         // Smooth scrolling
-        const scrollToSection = (sectionId) => {
-            document.getElementById(sectionId)?.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-            // Close mobile menu if open
-            document.getElementById('mobileMenu').classList.add('hidden');
-        };
-
-        // Mobile menu toggle
-        const toggleMobileMenu = () => {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-        };
-
-        // Download handler
-        const handleDownload = () => {
-            // In a real implementation, this would trigger CV download
-            alert('CV download functionality would be implemented here! This showcases Astro\'s interactive capabilities.');
-        };
-
-        // Performance metrics (simulated)
-        const trackPerformance = () => {
-            if ('performance' in window) {
-                const loadTime = Math.round(performance.now());
-                console.log(\`🚀 Astro CV loaded in \${loadTime}ms - Ultra fast!\`);
-            }
-        };
-
-        // Initialize on DOM ready
-        document.addEventListener('DOMContentLoaded', () => {
-            observeElements();
-            trackPerformance();
-            
-            // Add ARIA live region for dynamic content
-            const liveRegion = document.createElement('div');
-            liveRegion.setAttribute('aria-live', 'polite');
-            liveRegion.setAttribute('aria-atomic', 'true');
-            liveRegion.className = 'sr-only';
-            liveRegion.id = 'live-region';
-            document.body.appendChild(liveRegion);
-        });
-
-        // Service Worker registration (Progressive Web App)
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                console.log('🌟 Ready for PWA enhancement with Astro!');
-            });
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Analytics placeholder (would be replaced with real analytics)
-        const trackEvent = (action, category) => {
-            console.log(\`📊 Analytics: \${category} - \${action}\`);
-        };
-
-        // Add click tracking
-        document.addEventListener('click', (e) => {
-            if (e.target.matches('a[href^="mailto:"]')) {
-                trackEvent('email_click', 'contact');
-            } else if (e.target.matches('a[href^="tel:"]')) {
-                trackEvent('phone_click', 'contact');
-            } else if (e.target.matches('a[href*="linkedin"]')) {
-                trackEvent('linkedin_click', 'social');
-            }
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Astro + Tailwind CV loaded successfully!');
+            console.log('⚡ Zero JavaScript framework overhead - pure performance!');
         });
-
-        // Accessibility enhancements
-        document.addEventListener('keydown', (e) => {
-            // Enhanced keyboard navigation
-            if (e.key === 'Escape') {
-                const menu = document.getElementById('mobileMenu');
-                if (!menu.classList.contains('hidden')) {
-                    menu.classList.add('hidden');
-                }
-            }
-        });
-    </script>
-
-    <!-- Structured Data for Enhanced SEO -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "Caroline Williamson CV - Astro + Tailwind Implementation",
-        "description": "Ultra-fast, SEO-optimized CV showcasing Astro's zero-JS approach and Tailwind's utility-first styling",
-        "url": "https://carolinewilliamson.tech/astro-tailwind",
-        "mainEntity": {
-            "@type": "Person",
-            "name": "Caroline Williamson",
-            "jobTitle": "Executive Technology Leader",
-            "worksFor": {
-                "@type": "Organization",
-                "name": "Jemena"
-            }
-        },
-        "technicalInfo": {
-            "framework": "Astro",
-            "styling": "Tailwind CSS",
-            "performance": "Zero JS by default",
-            "seo": "Server-side rendered"
-        }
-    }
     </script>
 </body>
 </html>
