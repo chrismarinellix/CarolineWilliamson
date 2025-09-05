@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 3 + Tailwind CSS - Capability Showcase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .vue-gradient {
+            background: linear-gradient(135deg, #4fc08d 0%, #42b883 50%, #1e40af 100%);
+        }
+        .variation-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .variation-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(79, 192, 141, 0.3);
+        }
+    </style>
+</head>
+<body class="vue-gradient min-h-screen">
+    <div class="container mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <div class="flex items-center justify-center mb-6">
+                <a href="../../../tech-showcase.html" 
+                   class="flex items-center space-x-2 text-white hover:text-green-200 transition-colors mr-8">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m12 19-7-7 7-7"/>
+                        <path d="M19 12H5"/>
+                    </svg>
+                    <span>Back to Tech Showcase</span>
+                </a>
+                <div class="bg-green-600 text-white px-4 py-2 rounded-full font-bold">
+                    Vue 3 + Tailwind CSS
+                </div>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">
+                Vue 3 Reactivity Showcase
+            </h1>
+            <p class="text-xl text-green-100 max-w-4xl mx-auto">
+                Experience Caroline's CV showcasing Vue 3's reactive magic - from basic reactivity to 
+                real-time dashboards, progressive web apps, and advanced component systems.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Variation 1: Basic Reactive -->
+            <div class="variation-card rounded-2xl p-6">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">1</div>
+                    <span class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">✅ Ready</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 text-center">Basic Reactive CV</h3>
+                <p class="text-green-100 mb-4 text-center">Vue 3 Composition API with reactive data and dark mode</p>
+                <ul class="text-sm text-green-200 mb-6 space-y-1">
+                    <li>• Composition API</li>
+                    <li>• Reactive data binding</li>
+                    <li>• Vue transitions</li>
+                    <li>• Dark mode toggle</li>
+                </ul>
+                <a href="../index.html" class="block bg-green-500 text-white px-4 py-2 rounded-lg font-semibold text-center hover:bg-green-600 transition-colors">
+                    View Demo
+                </a>
+            </div>
+
+            <!-- Variation 2: Real-time Dashboard -->
+            <div class="variation-card rounded-2xl p-6">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">2</div>
+                    <span class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">✅ Ready</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 text-center">Real-time Dashboard</h3>
+                <p class="text-green-100 mb-4 text-center">Live data updates with watchers and computed properties</p>
+                <ul class="text-sm text-green-200 mb-6 space-y-1">
+                    <li>• Live data updates</li>
+                    <li>• Reactive computed props</li>
+                    <li>• Watchers & notifications</li>
+                    <li>• Tab-based navigation</li>
+                </ul>
+                <a href="2-realtime/index.html" class="block bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold text-center hover:bg-blue-600 transition-colors">
+                    View Demo
+                </a>
+            </div>
+
+            <!-- More variations coming soon -->
+            <div class="variation-card rounded-2xl p-6 opacity-60">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">3+</div>
+                    <span class="bg-orange-200 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold">🔨 Building</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 text-center">More Variations</h3>
+                <p class="text-green-100 mb-4 text-center">Additional Vue 3 capability showcases coming soon</p>
+                <ul class="text-sm text-green-200 mb-6 space-y-1">
+                    <li>• Progressive Web App</li>
+                    <li>• Complex forms</li>
+                    <li>• Component library</li>
+                    <li>• Admin interface</li>
+                </ul>
+                <button class="w-full bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold cursor-not-allowed">
+                    Coming Soon
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

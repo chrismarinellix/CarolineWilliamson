@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astro + Tailwind - Ultimate Performance Showcase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .astro-gradient {
+            background: linear-gradient(135deg, #ff5d01 0%, #000000 50%, #1e40af 100%);
+        }
+        .variation-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .variation-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(255, 93, 1, 0.3);
+        }
+    </style>
+</head>
+<body class="astro-gradient min-h-screen">
+    <div class="container mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <div class="flex items-center justify-center mb-6">
+                <a href="../../../index.html" 
+                   class="flex items-center space-x-2 text-white hover:text-orange-200 transition-colors mr-8">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m12 19-7-7 7-7"/>
+                        <path d="M19 12H5"/>
+                    </svg>
+                    <span>Back to Tech Showcase</span>
+                </a>
+                <div class="bg-orange-600 text-white px-4 py-2 rounded-full font-bold">
+                    Astro + Tailwind
+                </div>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4">
+                Astro Ultimate Performance
+            </h1>
+            <p class="text-xl text-orange-100 max-w-4xl mx-auto">
+                Experience Caroline's CV showcasing Astro's revolutionary approach - zero JavaScript by default,
+                perfect SEO, and the ability to combine React, Vue, and Svelte in one application.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Variation 1: Basic Astro -->
+            <div class="variation-card rounded-2xl p-6">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">1</div>
+                    <span class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">✅ Ready</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 text-center">SEO-Perfect CV</h3>
+                <p class="text-orange-100 mb-4 text-center">Zero JS by default with perfect SEO optimization</p>
+                <ul class="text-sm text-orange-200 mb-6 space-y-1">
+                    <li>• Zero JavaScript default</li>
+                    <li>• Perfect SEO optimization</li>
+                    <li>• Ultra-fast loading</li>
+                    <li>• Server-side rendering</li>
+                </ul>
+                <a href="../index.html" class="block bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold text-center hover:bg-orange-600 transition-colors">
+                    View Demo
+                </a>
+            </div>
+
+            <!-- Variation 2: Multi-Framework -->
+            <div class="variation-card rounded-2xl p-6">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">2</div>
+                    <span class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">✅ Ready</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 text-center">Multi-Framework</h3>
+                <p class="text-orange-100 mb-4 text-center">React + Vue + Svelte components in one app!</p>
+                <ul class="text-sm text-orange-200 mb-6 space-y-1">
+                    <li>• React contact section</li>
+                    <li>• Vue experience timeline</li>
+                    <li>• Svelte skills matrix</li>
+                    <li>• Islands architecture</li>
+                </ul>
+                <a href="6-multiframework/index.html" class="block bg-purple-500 text-white px-4 py-2 rounded-lg font-semibold text-center hover:bg-purple-600 transition-colors">
+                    View Demo
+                </a>
+            </div>
+
+            <!-- More variations coming -->
+            <div class="variation-card rounded-2xl p-6 opacity-60">
+                <div class="text-center mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">3+</div>
+                    <span class="bg-orange-200 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold">🔨 Building</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-3 text-center">More Variations</h3>
+                <p class="text-orange-100 mb-4 text-center">Additional Astro showcases coming</p>
+                <button class="w-full bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold cursor-not-allowed">
+                    Coming Soon
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
